@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: spring-ai-assistent
+  ai:
+    ollama:
+      chat:
+        model: llama3.2
+
+  mvc:
+    static-path-pattern: /**

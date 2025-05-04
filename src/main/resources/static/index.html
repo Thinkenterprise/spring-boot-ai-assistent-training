@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ChatGPT Style Client</title>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #343541;
+      color: #ececf1;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Sidebar */
+    #sidebar {
+      width: 260px;
+      background-color: #202123;
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      border-right: 1px solid #2d2f36;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: #343541;
+    }
+
+    .sidebar-icon {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #c5c5d2;
+    }
+
+    .sidebar-icon:hover {
+      background-color: #2d2f36;
+      color: white;
+    }
+
+    .session {
+      padding: 10px;
+      margin-bottom: 5px;
+      background-color: #2c2d30;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .session.active {
+      background-color: #3e3f45;
+    }
+
+    #sidebar-top {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    /* Chat */
+    #chat {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+    }
+
+    #chat-container {
+      max-width: 720px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    #messages {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    .message {
+      margin-bottom: 16px;
+      white-space: pre-wrap;
+      padding: 12px;
+      border-radius: 8px;
+      max-width: 80%;
+    }
+
+    .user {
+      align-self: flex-end;
+      text-align: right;
+      background-color: #40414f;
+    }
+
+    .bot {
+      align-self: flex-start;
+      background-color: #444654;
+    }
+
+    /* Input */
+    #input-area {
+      display: flex;
+      align-items: flex-end;
+      padding: 20px 0;
+      position: relative;
+      border-top: 1px solid #4b4b50;
+    }
+
+    .input-wrapper {
+      flex-grow: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      background-color: #40414f;
+      border-radius: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      resize: none;
+      padding: 12px 80px 12px 12px;
+      font-size: 16px;
+      border-radius: 10px;
+      background-color: #40414f;
+      color: white;
+      border: none;
+      outline: none;
+      min-height: 44px;
+      max-height: 200px;
+    }
+
+    .input-icons {
+      position: absolute;
+      right: 10px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .icon-button {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      padding: 6px;
+    }
+
+    .icon-button:hover {
+      color: #10a37f;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div id="sidebar">
+    <div id="sidebar-top">
+      <div class="sidebar-header" id="new-session">
+        <i data-lucide="plus"></i>
+        <span>New Chat</span>
+      </div>
+      <div class="sidebar-icon"><i data-lucide="user"></i> Profile</div>
+      <div class="sidebar-icon"><i data-lucide="settings"></i> Settings</div>
+      <div class="sidebar-icon"><i data-lucide="help-circle"></i> Help</div>
+    </div>
+    <div id="sessions"></div>
+  </div>
+
+  <!-- Chat Area -->
+  <div id="chat">
+    <div id="chat-container">
+      <div id="messages"></div>
+
+      <div id="input-area">
+        <div class="input-wrapper">
+          <textarea id="input" rows="1" placeholder="Type your message..."></textarea>
+          <div class="input-icons">
+            <button class="icon-button"><i data-lucide="mic"></i></button>
+            <button class="icon-button" id="send"><i data-lucide="send"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    const apiUrl = "http://localhost:8000/chat";
+
+    let sessions = JSON.parse(localStorage.getItem('chatSessions') || '{}');
+    let currentSessionId = null;
+
+    const sessionsDiv = document.getElementById('sessions');
+    const messagesDiv = document.getElementById('messages');
+    const input = document.getElementById('input');
+    const sendButton = document.getElementById('send');
+
+    function renderSessions() {
+      sessionsDiv.innerHTML = '';
+      for (let id in sessions) {
+        const div = document.createElement('div');
+        div.className = 'session' + (id === currentSessionId ? ' active' : '');
+        div.textContent = sessions[id].name;
+        div.onclick = () => switchSession(id);
+        sessionsDiv.appendChild(div);
+      }
+    }
+
+    function switchSession(id) {
+      currentSessionId = id;
+      renderSessions();
+      renderMessages();
+    }
+
+    function renderMessages() {
+      messagesDiv.innerHTML = '';
+      if (!currentSessionId || !sessions[currentSessionId]) return;
+      for (let msg of sessions[currentSessionId].messages) {
+        const div = document.createElement('div');
+        div.className = 'message ' + msg.role;
+        div.textContent = msg.content;
+        messagesDiv.appendChild(div);
+      }
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function addMessage(role, content) {
+      const session = sessions[currentSessionId];
+      session.messages.push({ role, content });
+      saveSessions();
+      renderMessages();
+    }
+
+    function saveSessions() {
+      localStorage.setItem('chatSessions', JSON.stringify(sessions));
+    }
+
+    function newSession() {
+      const id = Date.now().toString();
+      sessions[id] = { name: `Chat ${Object.keys(sessions).length + 1}`, messages: [] };
+      currentSessionId = id;
+      saveSessions();
+      renderSessions();
+      renderMessages();
+    }
+
+    async function sendMessage() {
+      const text = input.value.trim();
+      if (!text) return;
+      addMessage('user', text);
+      input.value = '';
+      input.style.height = 'auto';
+
+      try {
+        const res = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text })
+        });
+        const data = await res.json();
+        addMessage('bot', data.reply || '[Error receiving response]');
+      } catch (err) {
+        addMessage('bot', '[Failed to fetch response]');
+      }
+    }
+
+    sendButton.onclick = sendMessage;
+
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    input.addEventListener('input', () => {
+      input.style.height = 'auto';
+      input.style.height = input.scrollHeight + 'px';
+    });
+
+    document.getElementById('new-session').onclick = newSession;
+
+    // Init
+    if (Object.keys(sessions).length === 0) newSession();
+    else {
+      currentSessionId = Object.keys(sessions)[0];
+      renderSessions();
+      renderMessages();
+    }
+  </script>
+
+</body>
+</html>
+
+
