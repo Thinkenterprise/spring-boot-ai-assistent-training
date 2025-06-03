@@ -1,10 +1,30 @@
 spring:
   application:
     name: spring-ai-assistent
+  profiles:
+    active: openai
+
+  mvc:
+    static-path-pattern: /**
+---
+spring:
+  config:
+    activate:
+      on-profile: openai
+
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+    
+      
+---
+spring:
+  config:
+    activate:
+      on-profile: ollama
+
   ai:
     ollama:
       chat:
         model: llama3.2
-
-  mvc:
-    static-path-pattern: /**
+   

@@ -51,23 +51,49 @@
       color: white;
     }
 
-    .session {
-      padding: 10px;
-      margin-bottom: 5px;
-      background-color: #2c2d30;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .session.active {
-      background-color: #3e3f45;
-    }
-
     #sidebar-top {
       display: flex;
       flex-direction: column;
       gap: 12px;
       margin-bottom: 20px;
+    }
+
+    .session-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 10px;
+      background-color: #2c2d30;
+      border-radius: 6px;
+      margin-bottom: 5px;
+      cursor: pointer;
+    }
+
+    .session-wrapper:hover {
+      background-color: #3e3f45;
+    }
+
+    .session-name {
+      flex-grow: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .delete-button {
+      background: none;
+      border: none;
+      color: #999;
+      cursor: pointer;
+      padding: 0 4px;
+    }
+
+    .delete-button:hover {
+      color: red;
+    }
+
+    .session.active {
+      background-color: #3e3f45;
     }
 
     /* Chat */
@@ -201,7 +227,7 @@
   <script>
     lucide.createIcons();
 
-    const apiUrl = "http://localhost:8000/chat";
+    const apiUrl = "http://localhost:8080/chat";
 
     let sessions = JSON.parse(localStorage.getItem('chatSessions') || '{}');
     let currentSessionId = null;
@@ -214,12 +240,27 @@
     function renderSessions() {
       sessionsDiv.innerHTML = '';
       for (let id in sessions) {
-        const div = document.createElement('div');
-        div.className = 'session' + (id === currentSessionId ? ' active' : '');
-        div.textContent = sessions[id].name;
-        div.onclick = () => switchSession(id);
-        sessionsDiv.appendChild(div);
+        const wrapper = document.createElement('div');
+        wrapper.className = 'session-wrapper' + (id === currentSessionId ? ' active' : '');
+
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'session-name';
+        nameSpan.textContent = sessions[id].name;
+        nameSpan.onclick = () => switchSession(id);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete-button';
+        deleteBtn.innerHTML = '<i data-lucide="trash-2" style="width:16px;height:16px;"></i>';
+        deleteBtn.onclick = (e) => {
+          e.stopPropagation();
+          deleteSession(id);
+        };
+
+        wrapper.appendChild(nameSpan);
+        wrapper.appendChild(deleteBtn);
+        sessionsDiv.appendChild(wrapper);
       }
+      lucide.createIcons(); // Icons nach DOM-Update neu laden
     }
 
     function switchSession(id) {
@@ -255,6 +296,17 @@
       const id = Date.now().toString();
       sessions[id] = { name: `Chat ${Object.keys(sessions).length + 1}`, messages: [] };
       currentSessionId = id;
+      saveSessions();
+      renderSessions();
+      renderMessages();
+    }
+
+    function deleteSession(id) {
+      delete sessions[id];
+      if (id === currentSessionId) {
+        const remaining = Object.keys(sessions);
+        currentSessionId = remaining.length > 0 ? remaining[0] : null;
+      }
       saveSessions();
       renderSessions();
       renderMessages();
@@ -307,5 +359,3 @@
 
 </body>
 </html>
-
-
