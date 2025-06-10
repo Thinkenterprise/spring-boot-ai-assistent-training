@@ -3,7 +3,6 @@ spring:
     name: spring-ai-assistent
   profiles:
     active: openai
-
   mvc:
     static-path-pattern: /**
 ---
@@ -11,18 +10,20 @@ spring:
   config:
     activate:
       on-profile: openai
-
   ai:
     openai:
       api-key: ${OPENAI_API_KEY}
-    
-      
+    vectorstore:
+      qdrant:
+       host: ${QDRANT_HOST:localhost}
+       port: ${QDRANT_PORT:6334}
+       collection-name: insurance  
+       initialize-schema: true
 ---
 spring:
   config:
     activate:
       on-profile: ollama
-
   ai:
     ollama:
       chat:
