@@ -1,19 +1,11 @@
 package com.thinkenterprise;
 
-import java.util.List;
-
-import org.springframework.ai.document.Document;
-import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
-import org.springframework.ai.reader.tika.TikaDocumentReader;
-import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import com.thinkenterprise.ai.etl.ParagraphTextSplitter;
 
 @SpringBootApplication
 public class ChatApplication implements ApplicationRunner {
@@ -46,13 +38,15 @@ public class ChatApplication implements ApplicationRunner {
 		 * System.out.println("PDF reading completed.");
 		 */
 		// PDF mit TikaDocumentReader einlesen
+		/* 
 		PagePdfDocumentReader reader = new PagePdfDocumentReader("classpath:/test-document.pdf");
 		List<Document> docs = reader.get();
 
-		// Paragraphen-Splitter anwenden
+		
 		ParagraphTextSplitter splitter = new ParagraphTextSplitter();
 		List<Document> paragraphs = splitter.split(docs);
 
+		
 		vectorStore.add(paragraphs);
 
 		List<Document> allDocs = vectorStore.similaritySearch(
@@ -62,6 +56,7 @@ public class ChatApplication implements ApplicationRunner {
 			System.out.println("Text: " + doc.getText());
 			System.out.println("Metadata: " + doc.getMetadata());
 		}
+			*/
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.thinkenterprise.ai.tools;
 
 import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
 
 import com.thinkenterprise.domain.Customer;
@@ -15,8 +16,8 @@ public class InsuranceCustomerNumberTool {
        this.insuranceCustomerService=insuranceCustomerService;
     }
 
-    @Tool(description = "Stellt eine Anfrage an den Versicherungsservice, um Kundendaten zu erhalten.")
-    public Customer getCustomerData(String name) {
+    @Tool(name = "get_CustomerDetails", description = "Stellt eine Anfrage an den Versicherungsservice, um Kundendaten zu erhalten.")
+    public Customer getCustomerDetails(@ToolParam(required = true, description = "Name des Kunden") String name) {
         return insuranceCustomerService.getCustomerData(name);
     }
 

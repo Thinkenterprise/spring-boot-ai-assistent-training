@@ -13,6 +13,7 @@ spring:
   ai:
     openai:
       api-key: ${OPENAI_API_KEY}
+       
     vectorstore:
       qdrant:
        host: ${QDRANT_HOST:localhost}
