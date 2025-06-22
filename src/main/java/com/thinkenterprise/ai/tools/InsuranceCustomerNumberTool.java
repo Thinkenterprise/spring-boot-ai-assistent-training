@@ -15,7 +15,7 @@ public class InsuranceCustomerNumberTool {
        this.insuranceCustomerService=insuranceCustomerService;
     }
 
-    @Tool(description = "Stellt eine Anfrage an den Versicherungsservice, um Kundendaten zu erhalten.")
+    @Tool(name = "ToolName", description = "Stellt eine Anfrage an den Versicherungsservice, um Kundendaten zu erhalten.")
     public Customer getCustomerData(String name) {
         return insuranceCustomerService.getCustomerData(name);
     }
