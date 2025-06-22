@@ -2,7 +2,7 @@ spring:
   application:
     name: spring-ai-assistent
   profiles:
-    active: openai
+    active: ollama
   mvc:
     static-path-pattern: /**
 ---
@@ -12,8 +12,12 @@ spring:
       on-profile: openai
   ai:
     openai:
+<<<<<<< HEAD
       api-key: ${OPENAI_API_KEY}
        
+=======
+      api-key: ${OPENAI_API_KEY} 
+>>>>>>> 95bb83c7f58a929220b0d9b9ecf6f4785b4317c2
     vectorstore:
       qdrant:
        host: ${QDRANT_HOST:localhost}

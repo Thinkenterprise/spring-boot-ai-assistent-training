@@ -1,5 +1,13 @@
 package com.thinkenterprise;
 
+<<<<<<< HEAD
+=======
+import java.util.List;
+
+import org.springframework.ai.document.Document;
+import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
+import org.springframework.ai.vectorstore.SearchRequest;
+>>>>>>> 95bb83c7f58a929220b0d9b9ecf6f4785b4317c2
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -19,6 +27,7 @@ public class ChatApplication implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
+<<<<<<< HEAD
 		/*
 		 * PagePdfDocumentReader pdfReader = new
 		 * PagePdfDocumentReader("classpath:/test-document.pdf");
@@ -39,6 +48,9 @@ public class ChatApplication implements ApplicationRunner {
 		 */
 		// PDF mit TikaDocumentReader einlesen
 		/* 
+=======
+		// PDF mit PDFBox einlesen
+>>>>>>> 95bb83c7f58a929220b0d9b9ecf6f4785b4317c2
 		PagePdfDocumentReader reader = new PagePdfDocumentReader("classpath:/test-document.pdf");
 		List<Document> docs = reader.get();
 
@@ -46,17 +58,28 @@ public class ChatApplication implements ApplicationRunner {
 		ParagraphTextSplitter splitter = new ParagraphTextSplitter();
 		List<Document> paragraphs = splitter.split(docs);
 
+<<<<<<< HEAD
 		
 		vectorStore.add(paragraphs);
+=======
+		// vectorStore.add(paragraphs);
+>>>>>>> 95bb83c7f58a929220b0d9b9ecf6f4785b4317c2
 
-		List<Document> allDocs = vectorStore.similaritySearch(
-				SearchRequest.builder().query(".*").build());
+		// List<Document> allDocs = vectorStore.similaritySearch(
+		// 		SearchRequest.builder().query(".*").build());
 
+<<<<<<< HEAD
 		for (Document doc : allDocs) {
 			System.out.println("Text: " + doc.getText());
 			System.out.println("Metadata: " + doc.getMetadata());
 		}
 			*/
+=======
+		// for (Document doc : allDocs) {
+		// 	System.out.println("Text: " + doc.getText());
+		// 	System.out.println("Metadata: " + doc.getMetadata());
+		// }
+>>>>>>> 95bb83c7f58a929220b0d9b9ecf6f4785b4317c2
 	}
 
 }
