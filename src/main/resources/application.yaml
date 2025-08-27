@@ -2,35 +2,81 @@ spring:
   application:
     name: spring-ai-assistent
   profiles:
-    active: ollama
+    active: production
+thinkenterprise:
+  exception: false
+---
+spring:
+  config:
+    activate:
+      on-profile: production
   mvc:
     static-path-pattern: /**
----
-spring:
-  config:
-    activate:
-      on-profile: openai
-  ai:
+  docker:
+    compose:
+      enabled: true
+      stop:
+        command: down
+        arguments:
+        - -v
+      start:
+        command: up
+  ai:   
     openai:
-<<<<<<< HEAD
       api-key: ${OPENAI_API_KEY}
-       
-=======
-      api-key: ${OPENAI_API_KEY} 
->>>>>>> 95bb83c7f58a929220b0d9b9ecf6f4785b4317c2
+      chat:
+        options:
+          tool-names:
+          - get_ProductDetailsByCustomer
+          internal-tool-execution-enabled: true
+    chat:
+      observations:
+        log-completion: false
+        log-prompt: false
+        include-error-logging: false
+      client:
+        observations:
+          log-prompt: false
+        
     vectorstore:
       qdrant:
-       host: ${QDRANT_HOST:localhost}
-       port: ${QDRANT_PORT:6334}
-       collection-name: insurance  
-       initialize-schema: true
+        host: ${QDRANT_HOST:localhost}
+        port: ${QDRANT_PORT:6334}
+        collection-name: insurance  
+        initialize-schema: true
+      observations:
+        log-query-response: false
+management:
+  endpoints:
+    access:
+      default: unrestricted
+    web:
+      exposure:
+        include: "*"
+  tracing:
+    sampling:
+      probability: 1.0
+    enabled: true
+  observations:
+    annotations:
+      enabled: true   
+
 ---
 spring:
   config:
     activate:
-      on-profile: ollama
+      on-profile: test
   ai:
     ollama:
+      init:
+        pull-model-strategy: always
+        embedding:
+          additional-models:
+            - mxbai-embed-large
       chat:
         model: llama3.2
-   
+    vectorstore:
+      qdrant:
+        collection-name: insurance  
+        initialize-schema: true
+  

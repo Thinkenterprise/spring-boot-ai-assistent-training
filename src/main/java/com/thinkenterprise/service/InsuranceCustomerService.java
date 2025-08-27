@@ -7,7 +7,7 @@ import com.thinkenterprise.domain.Customer;
 @Service
 public class InsuranceCustomerService {
 
-    public Customer getCustomerData(String Name) {
+    public Customer getCustomerDetails(String Name) {
        return new Customer("IN2000", "Michael", LocalDate.of(1970, 4, 14));
     }
 }

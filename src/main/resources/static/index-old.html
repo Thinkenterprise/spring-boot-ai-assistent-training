@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <title>ChatGPT Style Client</title>
@@ -192,7 +191,6 @@
     }
   </style>
 </head>
-
 <body>
 
   <!-- Sidebar -->
@@ -321,39 +319,16 @@
       input.value = '';
       input.style.height = 'auto';
 
-
-
       try {
         const res = await fetch(apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: text })
         });
-
-        if (!res.ok) {
-          // ProblemDetail nach RFC 9457 parsen
-          const problem = await res.json().catch(() => ({}));
-          const status = problem.status || res.status;
-          const title = problem.title || 'Unbekannter Fehler';
-          const detail = problem.detail || 'Keine weiteren Details.';
-          const instance = problem.instance ? `\nInstanz: ${problem.instance}` : '';
-
-          const errorMsg =
-            `❌ Fehler (${status})\n` +
-            `Titel: ${title}\n` +
-            `Detail: ${detail}` +
-            instance;
-
-          addMessage('bot error', errorMsg);
-          return;
-        }
-
-        // erfolgreiche Antwort
         const data = await res.json();
-        addMessage('bot', data.reply || '[Keine Antwort erhalten]');
-
+        addMessage('bot', data.reply || '[Error receiving response]');
       } catch (err) {
-        addMessage('bot error', `❌ Netzwerkfehler: ${err.message || err}`);
+        addMessage('bot', '[Failed to fetch response]');
       }
     }
 
@@ -383,5 +358,4 @@
   </script>
 
 </body>
-
 </html>

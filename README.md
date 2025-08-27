@@ -1,23 +1,11 @@
-# spring-boot-ai-assistent-training
-Source Code of the Spring AI Assistent Training and Book 
+# Insurance Case 
 
-# Setup Project 
-- POM BOM 
-- Ollama Starter 
+Beschreibe kurz den Insurance Case .... 
 
-# Setup UI
-- UI 
-- Explain 
-- Start and Test 
-
-# Configuration 
-- Chat Client Bean Creation 
-
-# Properties 
-- Configuration of the Ollama Model 
+# Chat Client 
 
 
-# Chat Client UI Integration 
+
 
 
 
