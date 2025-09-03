@@ -13,7 +13,11 @@ public class InsuranceChatService {
         this.chatClient = chatClient;
     }
 
-    public ChatResponse chatService(String input) {
+    public String chatService(String input) {
+        return chatClient.prompt(input).call().content();
+    }
+
+     public ChatResponse chatServiceWithResponse(String input) {
         return chatClient.prompt(input).call().chatResponse();
     }
 

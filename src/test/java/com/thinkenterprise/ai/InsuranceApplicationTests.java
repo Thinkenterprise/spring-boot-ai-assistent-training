@@ -47,7 +47,7 @@ class InsuranceApplicationTests {
 		String query = "Kann die vereinbarte Versicherungsdauer verlängert werden?";
 
 		// Get response from our Chat Model with RAG Context information 
-		ChatResponse response = insuranceChatService.chatService(query);
+		ChatResponse response = insuranceChatService.chatServiceWithResponse(query);
 		String responseContent = response.getResult().getOutput().getText();
 
 		// Get RAG Data 

@@ -3,7 +3,13 @@ https://github.com/spring-projects/spring-ai
 https://spring.io/projects/spring-ai
 
 # Insurance Case 
-Beschreibe kurz den Insurance Case .... 
+**Tool**: AI Assistent 
+**Branche**: Insurance 
+**Akteure**: Kunde, Makler, Fachabteilung 
+**Use Case**: Makler möchte den Kunden schnell beraten, ohne die Fachabteilung einzubeziehen 
+**Scope**: Informationen 
+**Unsuitable**: Entscheidungen, Durchführung 
+
 
 # Chat  
 - UI 
@@ -48,7 +54,7 @@ Beschreibe kurz den Insurance Case ....
 - Memory Advisor 
 - Chat History 
 - **Practical Case**: 
-- *Question*: Welche Kundennummer hat Michael Schäfer? 
+- *Question*: Welche Vertrags-ID hat Michael Schäfer? 
 - *Answer*: Kundennummer: IN2000 
 
 
