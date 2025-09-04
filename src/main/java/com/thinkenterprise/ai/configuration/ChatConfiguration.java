@@ -58,7 +58,7 @@ public class ChatConfiguration {
                 var chatClient = builder.defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                                 .defaultAdvisors(retrievalAugmentationAdvisor)
                                 .defaultSystem(prompt.getContents())
-                                .defaultTools(insuranceCustomerDetailsTool)
+                                //.defaultTools(insuranceCustomerDetailsTool)
                                 //.defaultToolNames("get_ProductDetailsByCustomer")
                                 .defaultToolContext(new HashMap<String, Object>(Map.of("databaseHost", "hostValue")))
                                 .build();

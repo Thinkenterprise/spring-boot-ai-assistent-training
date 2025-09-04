@@ -31,9 +31,8 @@ public class InsuranceChatController {
     @PostMapping
     public Map<String, String> chat(@RequestBody Map<String, String> payload) {
         String message = payload.get("message");
-        ChatResponse response = insuranceChatService.chatService(message);
-        message=response.getResult().getOutput().getText();
-        return Map.of("reply", message);
+        var result = insuranceChatService.chatService(message);
+        return Map.of("reply", result);
     }
 
     @ExceptionHandler(value = InsuranceException.class)

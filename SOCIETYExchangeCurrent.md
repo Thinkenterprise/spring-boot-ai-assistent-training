@@ -24,7 +24,17 @@ Spring AI 1.0.0, Spring 3.5
 Spring AI 2.0.0, Spring 4.0 - November 2025 
 
 # Insurance Case 
+<<<<<<< HEAD:SOCIETYExchangeCurrent.md
 Explain something about the use cases specified in the excel 
+=======
+**Tool**: AI Assistent 
+**Branche**: Insurance 
+**Akteure**: Kunde, Makler, Fachabteilung 
+**Use Case**: Makler möchte den Kunden schnell beraten, ohne die Fachabteilung einzubeziehen 
+**Scope**: Informationen 
+**Unsuitable**: Entscheidungen, Durchführung 
+
+>>>>>>> e8a7587be37c60aecfa57833e3bc1456c2d45241:SOCIETYExchange.md
 
 # Chat  
 - UI 
@@ -69,7 +79,7 @@ Explain something about the use cases specified in the excel
 - Memory Advisor 
 - Chat History 
 - **Practical Case**: 
-- *Question*: Welche Kundennummer hat Michael Schäfer? 
+- *Question*: Welche Vertrags-ID hat Michael Schäfer? 
 - *Answer*: Kundennummer: IN2000 
 
 
