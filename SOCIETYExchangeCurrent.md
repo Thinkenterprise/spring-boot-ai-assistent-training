@@ -1,9 +1,30 @@
+# Setup 
+- Visual Studio Code 
+- Docker 
+- Spring AI & Spring Boot Milestones 
+- Spring AI Documentation 
+- Use Case Excel 
+
+# Motivation 
+- Spring Boot goes AI 
+- AI - Product  
+- Java 
+- Spring Boot 
+- Spring Boot Schulung 
+
+# Ziel 
+- Spring AI 
+- Feature Code 
+- Demo    
+
 # Spring AI 
-https://github.com/spring-projects/spring-ai
-https://spring.io/projects/spring-ai
+ChatGPT Ende 2022 
+Spring AI 2023, 
+Spring AI 1.0.0, Spring 3.5 
+Spring AI 2.0.0, Spring 4.0 - November 2025 
 
 # Insurance Case 
-Beschreibe kurz den Insurance Case .... 
+Explain something about the use cases specified in the excel 
 
 # Chat  
 - UI 
