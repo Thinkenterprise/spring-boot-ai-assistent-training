@@ -5,6 +5,9 @@
 - Spring AI Documentation 
 - Use Case Excel 
 
+# Insurance Case 
+- Show in Excel 
+
 # Motivation 
 - Spring Boot goes AI 
 - AI - Product  
@@ -18,23 +21,10 @@
 - Demo    
 
 # Spring AI 
-ChatGPT Ende 2022 
-Spring AI 2023, 
-Spring AI 1.0.0, Spring 3.5 
-Spring AI 2.0.0, Spring 4.0 - November 2025 
-
-# Insurance Case 
-<<<<<<< HEAD:SOCIETYExchangeCurrent.md
-Explain something about the use cases specified in the excel 
-=======
-**Tool**: AI Assistent 
-**Branche**: Insurance 
-**Akteure**: Kunde, Makler, Fachabteilung 
-**Use Case**: Makler möchte den Kunden schnell beraten, ohne die Fachabteilung einzubeziehen 
-**Scope**: Informationen 
-**Unsuitable**: Entscheidungen, Durchführung 
-
->>>>>>> e8a7587be37c60aecfa57833e3bc1456c2d45241:SOCIETYExchange.md
+- ChatGPT Ende 2022 
+- Spring AI 2023, 
+- Spring AI 1.0.0, Spring 3.5 
+- Spring AI 2.0.0, Spring 4.0 - November 2025 
 
 # Chat  
 - UI 
