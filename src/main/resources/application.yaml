@@ -2,9 +2,37 @@ spring:
   application:
     name: spring-ai-assistent
   profiles:
-    active: production
+    active: production, mcp
 thinkenterprise:
   exception: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile: mcp
+  ai:
+    mcp:
+      client:
+        enabled: true
+        name: insurance-company-tool-mcp-client
+        version: 1.0.0
+        request-timeout: 30s
+        type: SYNC  
+        sse:
+          connections: 
+            webmvc-mcp-server:
+              url: http://localhost:8081
+#              sse-endpoint: /mcp/messages
+---
+spring:
+  config:
+    activate:
+      on-profile: noMcp
+  ai:
+    mcp:
+      client:
+        enabled: false
 ---
 spring:
   config:
@@ -46,6 +74,7 @@ spring:
         initialize-schema: true
       observations:
         log-query-response: false
+    
 management:
   endpoints:
     access:
@@ -60,7 +89,6 @@ management:
   observations:
     annotations:
       enabled: true   
-
 ---
 spring:
   config:
@@ -78,7 +106,7 @@ spring:
         options:
           tool-names:
           - get_ProductDetailsByCustomer
-          internal-tool-execution-enabled: true
+          internal-tool-execution-enabled: true          
     vectorstore:
       qdrant:
         collection-name: insurance  
