@@ -49,11 +49,17 @@ class InsuranceApplicationTests {
 		// Get response from our Chat Model with RAG Context information 
 		ChatResponse response = insuranceChatService.chatServiceWithResponse(query);
 		String responseContent = response.getResult().getOutput().getText();
+		System.out.println(responseContent);
 
 		// Get RAG Data 
 		@SuppressWarnings("unchecked")	
     	List<Document> responseDocuments =
         (List<Document>) response.getMetadata().get(RetrievalAugmentationAdvisor.DOCUMENT_CONTEXT);
+
+		for (Document document : responseDocuments) {
+			System.out.println(document.getText());
+			
+		}
 
 		// Create Evaluation Request 
 		EvaluationRequest evaluationRequest = new EvaluationRequest(query,responseDocuments, responseContent);

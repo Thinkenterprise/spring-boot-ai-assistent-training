@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.thinkenterprise.ai.properties.InsuranceProperties;
@@ -12,6 +13,7 @@ import com.thinkenterprise.domain.Customer;
 import com.thinkenterprise.service.InsuranceCustomerService;
 
 @Component
+@Profile("!mcp")
 public class InsuranceCustomerDetailsTool {
 
     static final Logger logger = LoggerFactory.getLogger(InsuranceCustomerDetailsTool.class);

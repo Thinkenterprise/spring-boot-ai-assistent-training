@@ -14,6 +14,7 @@ import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.ai.rag.generation.augmentation.ContextualQueryAugmenter;
 import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
 import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.execution.DefaultToolExecutionExceptionProcessor;
 import org.springframework.ai.tool.execution.ToolExecutionExceptionProcessor;
 import org.springframework.ai.tool.function.FunctionToolCallback;
@@ -24,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 import org.springframework.util.ReflectionUtils;
 
@@ -44,6 +46,7 @@ public class ChatConfiguration {
         private Resource systemPromptResource;
 
         @Bean
+        @Profile("!mcp")
         public ChatClient createClient(ChatClient.Builder builder, ChatMemory chatMemory,
                         InsuranceCustomerDetailsTool insuranceCustomerDetailsTool, 
                         RetrievalAugmentationAdvisor retrievalAugmentationAdvisor) {
@@ -58,13 +61,36 @@ public class ChatConfiguration {
                 var chatClient = builder.defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                                 .defaultAdvisors(retrievalAugmentationAdvisor)
                                 .defaultSystem(prompt.getContents())
-                                //.defaultTools(insuranceCustomerDetailsTool)
-                                //.defaultToolNames("get_ProductDetailsByCustomer")
+                                .defaultTools(insuranceCustomerDetailsTool)
                                 .defaultToolContext(new HashMap<String, Object>(Map.of("databaseHost", "hostValue")))
                                 .build();
 
                 return chatClient;
         }
+
+        @Bean
+        @Profile("mcp")
+        public ChatClient createClientWithMcpSupport(ChatClient.Builder builder, ChatMemory chatMemory,
+                        ToolCallbackProvider tools,
+                        RetrievalAugmentationAdvisor retrievalAugmentationAdvisor) {
+
+
+                SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemPromptResource);
+                Map<String, Object> variables = Map.of("ToolCustomerDetails", "get_CustomerDetails",
+                                "ToolProductDetailsByCustomer", "get_ProductDetailsByCustomer");
+
+                Prompt prompt = systemPromptTemplate.create(variables);
+
+                var chatClient = builder.defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+                                .defaultAdvisors(retrievalAugmentationAdvisor)
+                                .defaultSystem(prompt.getContents())
+                                .defaultToolCallbacks(tools)
+                                .defaultToolContext(new HashMap<String, Object>(Map.of("databaseHost", "hostValue")))
+                                .build();
+
+                return chatClient;
+        }
+
 
         @Bean
         public ToolExecutionExceptionProcessor toolExecutionExceptionProcessor() {
