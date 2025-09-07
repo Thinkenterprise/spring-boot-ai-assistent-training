@@ -30,26 +30,7 @@ public class RagEtlOperationService {
 		ParagraphTextSplitter splitter = new ParagraphTextSplitter();
 		List<Document> paragraphs = splitter.split(documents);
 
-		/*
-		for (Document paragraph : paragraphs) {
-            logger.info("Paragraph: " + paragraph.getMetadata());
-            logger.info("Paragraph: " + paragraph.getText());
-		}
- */
 		vectorStore.add(paragraphs);
-
-		List<Document> allDocs = vectorStore.similaritySearch(
-				SearchRequest.builder()
-				             .query("Kann die vereinbarte Versicherungsdauer verlängert werden?")
-							 .topK(3)
-							 .build());
-
-		/* 				 
-		for (Document doc : allDocs) {
-			logger.info("Paragraph: " + doc.getMetadata());
-            logger.info("Paragraph: " + doc.getText());
-		}
-*/	
-	}
+	}	
 
 }

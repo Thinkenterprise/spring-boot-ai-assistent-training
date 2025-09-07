@@ -75,10 +75,10 @@ spring:
             - mxbai-embed-large
       chat:
         model: llama3.2
- #       options:
- #         tool-names:
- #         - get_ProductDetailsByCustomer
- #         internal-tool-execution-enabled: true
+        options:
+          tool-names:
+          - get_ProductDetailsByCustomer
+          internal-tool-execution-enabled: true
     vectorstore:
       qdrant:
         collection-name: insurance  
