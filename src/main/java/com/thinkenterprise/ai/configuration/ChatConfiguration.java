@@ -10,6 +10,8 @@ import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
+import org.springframework.ai.embedding.BatchingStrategy;
+import org.springframework.ai.embedding.TokenCountBatchingStrategy;
 import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.ai.rag.generation.augmentation.ContextualQueryAugmenter;
 import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
@@ -22,6 +24,7 @@ import org.springframework.ai.tool.method.MethodToolCallback;
 import org.springframework.ai.tool.support.ToolDefinitions;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +32,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 import org.springframework.util.ReflectionUtils;
 
+import com.knuddels.jtokkit.api.EncodingType;
 import com.thinkenterprise.ai.parameter.ProductRequest;
 import com.thinkenterprise.ai.properties.InsuranceProperties;
 import com.thinkenterprise.ai.rag.InsuranceDocumentProcessor;
@@ -36,7 +40,6 @@ import com.thinkenterprise.ai.rag.InsuranceQueryTransformer;
 import com.thinkenterprise.ai.tools.InsuranceCustomerDetailsTool;
 import com.thinkenterprise.domain.Product;
 import com.thinkenterprise.service.InsuranceProductService;
-
 
 @Configuration
 @EnableConfigurationProperties(InsuranceProperties.class)
@@ -48,9 +51,8 @@ public class ChatConfiguration {
         @Bean
         @Profile("!mcp")
         public ChatClient createClient(ChatClient.Builder builder, ChatMemory chatMemory,
-                        InsuranceCustomerDetailsTool insuranceCustomerDetailsTool, 
+                        InsuranceCustomerDetailsTool insuranceCustomerDetailsTool,
                         RetrievalAugmentationAdvisor retrievalAugmentationAdvisor) {
-
 
                 SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemPromptResource);
                 Map<String, Object> variables = Map.of("ToolCustomerDetails", "get_CustomerDetails",
@@ -74,7 +76,6 @@ public class ChatConfiguration {
                         ToolCallbackProvider tools,
                         RetrievalAugmentationAdvisor retrievalAugmentationAdvisor) {
 
-
                 SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemPromptResource);
                 Map<String, Object> variables = Map.of("ToolCustomerDetails", "get_CustomerDetails",
                                 "ToolProductDetailsByCustomer", "get_ProductDetailsByCustomer");
@@ -91,7 +92,6 @@ public class ChatConfiguration {
                 return chatClient;
         }
 
-
         @Bean
         public ToolExecutionExceptionProcessor toolExecutionExceptionProcessor() {
                 return new DefaultToolExecutionExceptionProcessor(true);
@@ -100,24 +100,24 @@ public class ChatConfiguration {
         @Bean
         public VectorStoreDocumentRetriever creaStoreDocumentRetriever(VectorStore vectorStore) {
                 return VectorStoreDocumentRetriever.builder()
-                                                   .vectorStore(vectorStore)
-                                                   .topK(3)
-                                                   .similarityThreshold(0.8)
-                                                   .build();
-        } 
-
-        @Bean
-        public RetrievalAugmentationAdvisor creaRetrievalAugmentationAdvisor(VectorStoreDocumentRetriever vectorStoreDocumentRetriever){
-                return RetrievalAugmentationAdvisor.builder()
-                                                   .queryTransformers(new InsuranceQueryTransformer())
-                                                   .documentRetriever(vectorStoreDocumentRetriever)
-                                                   .documentPostProcessors(new InsuranceDocumentProcessor())
-                                                   .queryAugmenter(ContextualQueryAugmenter.builder()
-                                                                                           .allowEmptyContext(true)
-                                                                                           .build())
-                                                   .build();
+                                .vectorStore(vectorStore)
+                                .topK(3)
+                                .similarityThreshold(0.8)
+                                .build();
         }
 
+        @Bean
+        public RetrievalAugmentationAdvisor creaRetrievalAugmentationAdvisor(
+                        VectorStoreDocumentRetriever vectorStoreDocumentRetriever) {
+                return RetrievalAugmentationAdvisor.builder()
+                                .queryTransformers(new InsuranceQueryTransformer())
+                                .documentRetriever(vectorStoreDocumentRetriever)
+                                .documentPostProcessors(new InsuranceDocumentProcessor())
+                                .queryAugmenter(ContextualQueryAugmenter.builder()
+                                                .allowEmptyContext(true)
+                                                .build())
+                                .build();
+        }
 
         public ToolCallback createMethodBasedToolCallback(InsuranceCustomerDetailsTool insuranceCustomerDetailsTool) {
                 Method method = ReflectionUtils.findMethod(InsuranceCustomerDetailsTool.class, "getCustomerDetails");
@@ -140,5 +140,15 @@ public class ChatConfiguration {
                                 .inputType(ProductRequest.class)
                                 .build();
         }
+
+        /* @Profile("test")
+        @Bean
+        BatchingStrategy batchingStrategy() {
+                return new TokenCountBatchingStrategy(
+                                EncodingType.CL100K_BASE,
+                                2000,
+                                0.1);
+        }
+                                */
 
 }

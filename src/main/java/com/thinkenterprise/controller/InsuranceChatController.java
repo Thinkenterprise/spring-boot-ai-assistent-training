@@ -3,7 +3,6 @@ package com.thinkenterprise.controller;
 import java.net.URI;
 import java.util.Map;
 
-import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;

@@ -2,7 +2,7 @@ spring:
   application:
     name: spring-ai-assistent
   profiles:
-    active: production, mcp
+    active: test,noMcp
 thinkenterprise:
   exception: false
 
@@ -101,6 +101,7 @@ spring:
         embedding:
           additional-models:
             - mxbai-embed-large
+           # - nomic-embed-text
       chat:
         model: llama3.2
         options:
@@ -110,5 +111,10 @@ spring:
     vectorstore:
       qdrant:
         collection-name: insurance  
-        initialize-schema: true
+        initialize-schema: true  
+        
+
+logging:
+  level:
+    org.apache.pdfbox.pdmodel.font: ERROR
   
