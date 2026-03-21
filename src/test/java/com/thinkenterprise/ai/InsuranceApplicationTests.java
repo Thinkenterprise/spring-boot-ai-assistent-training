@@ -69,6 +69,7 @@ class InsuranceApplicationTests {
 
 		// Execute releavncy Evaluation and Assertation 
 		Assertions.assertTrue(evaluationResponse.isPass());
+
 	}
 
 

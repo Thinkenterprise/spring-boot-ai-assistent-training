@@ -112,9 +112,7 @@ spring:
       qdrant:
         collection-name: insurance  
         initialize-schema: true  
-        
-
+lo
 logging:
   level:
     org.apache.pdfbox.pdmodel.font: ERROR
-  

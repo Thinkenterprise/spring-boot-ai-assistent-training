@@ -141,14 +141,13 @@ public class ChatConfiguration {
                                 .build();
         }
 
-        /* @Profile("test")
-        @Bean
-        BatchingStrategy batchingStrategy() {
-                return new TokenCountBatchingStrategy(
-                                EncodingType.CL100K_BASE,
-                                2000,
-                                0.1);
-        }
-                                */
+       @Profile("test")
+                @Bean
+                BatchingStrategy batchingStrategy() {
+                                return new TokenCountBatchingStrategy(
+                                                                EncodingType.CL100K_BASE,
+                                                                2000,
+                                                                0.1);
+                }
 
 }
