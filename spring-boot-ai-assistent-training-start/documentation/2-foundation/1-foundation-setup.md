@@ -1,26 +1,39 @@
-# Spring Boot AI Foundation Setup Training  
-Allgemeine Beschreibung des Trainings 
+# Spring Boot AI Foundation Setup Training
+
+In dieser Einheit wird eine lauffähige Spring AI Anwendung auf Basis von Spring Boot aufgesetzt. Als Grundlage dienen die bekannten Spring Boot Konzepte: Starter, Autokonfiguration und Properties.
 
 
-## Goal 
-Ziel dieser Einheit ist es, eine lauffaehige Spring-AI-Anwendung auf Basis von Spring Boot aufzusetzen und die dafuer notwendigen Abhaengigkeiten, Build-Konfigurationen und Basiseinstellungen zu verstehen. 
+## Goal
+
+Ziel dieser Einheit ist es, eine lauffähige Spring-AI-Anwendung auf Basis von Spring Boot aufzusetzen und die dafür notwendigen Abhängigkeiten, Build-Konfigurationen und Basiseinstellungen zu verstehen.
 
 
-## Architecture 
-Abbildung 1.1 zeigt, dass eine Spring Boot AI Anwendung aus Spring Boot und Spring AI besteht. Spring Boot (z. B. 3.5.0) und Spring AI (z. B. 1.1.2) sind jeweils über ihre Projektseiten dokumentiert: [Spring Boot](https://spring.io/projects/spring-boot) und [Spring AI](https://spring.io/projects/spring-ai). Beide Projekte stehen nebeneinander, wobei Spring AI den Starter-Mechanismus von Spring Boot nutzt.  
+## Architecture
+
+**Spring AI** ist ein neues Projekt innerhalb des Spring-Ökosystems und erweitert dieses um Funktionen zur Entwicklung KI-gestützter Anwendungen. Es baut konzeptionell auf den bewährten Mechanismen von *Startern*, *Autokonfiguration* und *Properties* auf.
+
+Eine KI-Assistent-Anwendung nutzt **Spring Boot** für allgemeine Anforderungen wie die Bereitstellung von Web-APIs. Für AI-spezifische Funktionalitäten – beispielsweise die Integration von Sprachmodellen oder Prompt-Verarbeitung – kommt **Spring AI** zum Einsatz. Dadurch wird eine klare Trennung zwischen allgemeinen Anwendungsbelangen und AI-spezifischer Logik erreicht.
+
+Spring AI wurde 2023 als Reaktion auf den ChatGPT-Hype im Spring-Ökosystem aufgesetzt (Lead: Dr. Mark Pollack und Christian Tzolov). Es lässt sich von Python-Projekten wie LangChain und LlamaIndex inspirieren, ist aber **keine Portierung** dieser Projekte – es wurde von Grund auf für das Java- und Spring-Ökosystem entwickelt.
+
+> **Hinweis:** Eine Alternative zu Spring AI im Java-Umfeld ist **LangChain4j**. In diesem Training verwenden wir ausschließlich Spring AI.
+
+Spring Boot (z. B. 3.5.x) und Spring AI (z. B. 1.1.4) sind jeweils über ihre Projektseiten dokumentiert: [Spring Boot](https://spring.io/projects/spring-boot) und [Spring AI](https://spring.io/projects/spring-ai). Spring AI nutzt dabei den Starter-Mechanismus von Spring Boot.
+
 
 ## Libraries
-Wir verwenden Java 21 als Long‑Term‑Support-Version; Spring Boot 3.5.0 ist auf Java 21 ausgelegt und liefert aktuelle Verbesserungen und Bugfixes. Spring AI 1.1.2 baut auf Spring Boot auf und stellt zusätzliche AI‑Starter bereit, die sich nahtlos in das Spring‑Ökosystem integrieren.
+
+Wir verwenden Java 21 als Long-Term-Support-Version. Spring Boot 3.5.x ist auf Java 21 ausgelegt. Spring AI 1.1.4 baut auf Spring Boot auf und stellt zusätzliche AI-Starter bereit.
 
 ```xml
     <properties>
         <java.version>21</java.version>
-        <spring-ai.version>1.1.2</spring-ai.version>
+        <spring-ai.version>1.1.4</spring-ai.version>
         <spring-boot.version>3.5.0</spring-boot.version>
     </properties>
 ```
 
-Spring Boot unterstützt sowohl Maven als auch Gradle als Build-Tools und liefert dafür passende Starter und Build‑Plugins. Seit Spring Boot 3.5 wird die Parent‑BOM (`spring-boot-starter-parent`) empfohlen, da sie einheitliche Dependency‑Versionen und sinnvolle Standardkonfigurationen bereitstellt.  
+Die Parent-BOM (`spring-boot-starter-parent`) stellt einheitliche Dependency-Versionen und sinnvolle Standardkonfigurationen bereit:
 
 ```xml
     <parent>
@@ -31,7 +44,7 @@ Spring Boot unterstützt sowohl Maven als auch Gradle als Build-Tools und liefer
     </parent>
 ```
 
-Der Starter `spring-boot-starter-web` bringt die notwendigen Bausteine fuer eine klassische Webanwendung mit, insbesondere den eingebetteten Webserver, Spring MVC und die Standardkonfiguration fuer HTTP-Endpunkte.
+Der Starter `spring-boot-starter-web` bringt die notwendigen Bausteine für eine klassische Webanwendung mit – insbesondere den eingebetteten Webserver, Spring MVC und die Standardkonfiguration für HTTP-Endpunkte:
 
 ```xml
    <dependencies>
@@ -42,8 +55,7 @@ Der Starter `spring-boot-starter-web` bringt die notwendigen Bausteine fuer eine
     </dependencies>
 ```
 
-Spring AI bietet sowohl für Maven als auch für Gradle ein BOM (Bill Of Materials), das die passenden Versionen der AI‑Abhängigkeiten zusammenfasst. Mit dem BOM‑Konzept stellt man sicher, dass alle Spring‑AI‑Artefakte kompatible und getestete Versionskombinationen verwenden, ohne jede Abhängigkeit einzeln festlegen zu müssen.
-
+Spring AI bietet ein BOM (Bill Of Materials), das kompatible Versionskombinationen aller Spring-AI-Artefakte zusammenfasst:
 
 ```xml
      <dependencyManagement>
@@ -59,7 +71,7 @@ Spring AI bietet sowohl für Maven als auch für Gradle ein BOM (Bill Of Materia
     </dependencyManagement>
 ```
 
-Als Beispiel fuer den naechsten Schritt kann ein AI-Starter wie `spring-ai-starter-model-ollama` eingebunden werden, um spaeter ein lokales Sprachmodell ueber Ollama aus der Anwendung heraus anzusprechen.
+Für den Zugriff auf ein lokales Sprachmodell über Ollama wird folgender AI-Starter eingebunden:
 
 ```xml
    <dependencies>
@@ -71,8 +83,10 @@ Als Beispiel fuer den naechsten Schritt kann ein AI-Starter wie `spring-ai-start
 ```
 
 
-## Implementation 
-Der Einstiegspunkt der Anwendung ist eine klassische Spring-Boot-Startklasse, die den Application Context initialisiert und damit die gesamte Anwendung startet. 
+## Implementation
+
+Der Einstiegspunkt der Anwendung ist eine klassische Spring-Boot-Startklasse:
+
 ```java
 package com.thinkenterprise;
 
@@ -87,18 +101,20 @@ public class ChatApplication {
     }
 }
 ```
-## Configuration 
-Die Basiskonfiguration wird in `application.yaml` gepflegt; hier werden zunaechst der Anwendungsname und spaeter weitere AI-, Modell- und Infrastrukturparameter definiert.
+
+## Configuration
+
+Die Basiskonfiguration wird in `application.yaml` gepflegt:
+
 ```yaml
 spring:
   application:
     name: spring-ai-assistent
-``` 
-
-## Test 
-
-1. Anwendung Starten 
-2. `URL: localhost:8080` 
-3. Es wird ein Text mit "Erstelle eine Chat UI" angezeigt.
+```
 
 
+## Test
+
+1. Anwendung starten: `mvn spring-boot:run`
+2. Browser öffnen: `http://localhost:8080`
+3. Es wird ein Hinweistext mit „Erstelle eine Chat UI" angezeigt
