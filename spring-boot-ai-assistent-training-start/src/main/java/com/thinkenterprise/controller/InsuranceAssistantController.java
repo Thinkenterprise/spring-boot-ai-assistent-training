@@ -16,18 +16,24 @@ import com.thinkenterprise.service.InsuranceAssistantService;
 
 @RestController
 @RequestMapping("/chat")
-//@CrossOrigin(origins = "*")
 public class InsuranceAssistantController {
 
-   
     private InsuranceAssistantService insuranceChatService;
-   
+
     InsuranceAssistantController(InsuranceAssistantService insuranceChatService) {
-        this.insuranceChatService=insuranceChatService;
+        this.insuranceChatService = insuranceChatService;
+    }
+
+    @PostMapping("console")
+    public String chat(@RequestBody String input) {
+        return insuranceChatService.chatService(input);
     }
 
     @PostMapping
-    public String chat(@RequestBody String input) {
-       return insuranceChatService.chatService(input);
+    public Map<String, String> chat(@RequestBody Map<String, String> payload) {
+        String message = payload.get("message");
+        var result = insuranceChatService.chatService(message);
+        return Map.of("reply", result);
     }
+
 }

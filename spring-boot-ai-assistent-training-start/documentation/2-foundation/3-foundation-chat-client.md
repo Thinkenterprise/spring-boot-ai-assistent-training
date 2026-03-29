@@ -1,4 +1,4 @@
-# Foundation Chat Client
+# Spring Boot AI Foundation Chat Client Training
 
 ## Ziel
 
@@ -9,32 +9,27 @@ Ziel dieser Einheit ist es, den Spring AI **Chat Client** zu verstehen und zu ve
 
 ## Architecture
 
-Der ``ChatClient`` kapselt den Zugriff auf ein ``ChatModel`` und bietet eine höhere Abstraktionsschicht.
+In dieser Einheit betrachten wir ausschließlich den ``ChatClient`` als zentrale Zugriffsschicht auf das Modell. Er kapselt das ``ChatModel`` und bietet ein Fluent API, mit dem Prompts, Optionen, Tools und weitere Defaults konsistent verwendet werden können.
 
-**Unterschied zwischen ``ChatClient`` und ``ChatModel``:**
-
-- ``ChatModel`` ist die Low-Level API, die direkt mit dem KI-Modell kommuniziert. Sie erfordert die manuelle Erstellung von ``Prompt``-Objekten und liefert rohe ``ChatResponse``-Objekte zurück.
-- ``ChatClient`` baut auf dem ``ChatModel`` auf und stellt ein Fluent API bereit, das typische Nutzungsmuster stark vereinfacht. Default-Konfigurationen wie System Prompts, Tools, Advisors oder Memory können einmalig hinterlegt werden und gelten dann für alle Aufrufe.
-
-Der ``ChatClient`` wird über die Spring Konfiguration erstellt und kann an beliebigen Stellen in der Anwendung verwendet werden — z.B. im ``InsuranceChatService`` — um Business-Funktionen den Zugriff auf das ``ChatModel`` zu ermöglichen.
+Der ``ChatClient`` wird in der Konfiguration als Bean erstellt und typischerweise im Service verwendet, damit Controller und spätere UI nicht direkt mit Modell-Details arbeiten müssen.
 
 Die typische Schicht-Architektur einer Anwendung mit Spring AI:
 
 ```text
-       Chat Model
-       (Provider-spezifische Implementierung)
-          ↑
-      Chat Client
-      (Abstraction über Content Model API)
-          ↑
-      Service
-      (Business Logic)
-          ↑
-      Controller
-      (REST Endpoints)
-          ↑
       User Interface
       (Web UI)
+          ↓
+      Controller
+      (REST Endpoints)
+          ↓
+      Service
+      (Business Logic)
+          ↓
+      **Chat Client**
+      **(Abstraction über Content Model API)**
+          ↓
+      Chat Model
+      (Provider-spezifische Implementierung)
 ```
 
 **Fokus dieser Einheit:** Wir beschäftigen uns mit dem **Chat Client** als primäre Schnittstelle für die Kommunikation mit dem ``ChatModel``.

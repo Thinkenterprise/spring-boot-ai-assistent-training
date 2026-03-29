@@ -1,4 +1,4 @@
-# Foundation Controller
+# Spring Boot AI Foundation Controller Training
 
 ## Ziel
 
@@ -6,25 +6,25 @@ Ziel dieser Einheit ist es, einen Spring MVC REST Controller zu implementieren, 
 
 
 ## Architecture
-Der Controller bildet die Schnittstelle zur AI Assistent Anwendung und delegiert die eigentliche Modellkommunikation an den Service ``InsuranceAssistantService``.
+In dieser Einheit betrachten wir ausschließlich den **Controller**. Er nimmt HTTP-Requests entgegen, validiert bzw. übernimmt die Eingabedaten und delegiert die eigentliche Verarbeitung an den ``InsuranceAssistantService``.
 
 **Fokus dieser Einheit:** Der Schwerpunkt liegt auf dem **Controller** (Request annehmen, an den Service delegieren, Response zurückgeben).
 
 ```text
-       Chat Model
-       (Provider-spezifische Implementierung)
-          ↑
-      Chat Client
-      (Abstraction über Content Model API)
-          ↑
+      User Interface
+      (Web UI)
+          ↓
+      **Controller**
+      **(REST Endpoints)**
+          ↓
       Service
       (Business Logic)
-          ↑
-      Controller
-      (REST Endpoints)
-          ↑
-      Client
-      (curl/Postman, später UI)
+          ↓
+      Chat Client
+      (Abstraction über Content Model API)
+          ↓
+      Chat Model
+      (Provider-spezifische Implementierung)
 ```
 ## Implementation
 

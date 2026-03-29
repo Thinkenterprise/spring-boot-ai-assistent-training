@@ -10,23 +10,26 @@ Die fachliche Herausforderung in diesem Schritt ist die klare Trennung zwischen 
 
 ## Architecture
 
-Für den Einstieg ist eine schlanke Architektur sinnvoll: Eine Web-UI sendet Requests an REST-Endpunkte, und das Backend kapselt den Zugriff auf Prompt-, Model- und Chat-Client-Funktionen. Das entspricht der im Buch beschriebenen Trennung zwischen allgemeiner Web-Anwendung (Spring Boot) und AI-spezifischer Logik (Spring AI).
+In dieser Einheit betrachten wir ausschließlich das **User Interface**. Die UI ist für Eingabe, Ausgabe und Nutzerführung verantwortlich und nutzt den Controller als klaren Integrationspunkt zum Backend.
 
 ```text
-+--------------------+      HTTP/JSON       +--------------------------+
-| Browser / Benutzer | <------------------> | Spring Boot Web API      |
-| chat.html / SPA    |                      | Controller / Service     |
-+--------------------+                      +------------+-------------+
-                                                         |
-                                                         | Spring AI
-                                                         v
-                                              +--------------------------+
-                                              | ChatClient / Model API   |
-                                              | z. B. Ollama             |
-                                              +--------------------------+
+      **User Interface**
+      **(Web UI)**
+          ↓
+      Controller
+      (REST Endpoints)
+          ↓
+      Service
+      (Business Logic)
+          ↓
+      Chat Client
+      (Abstraction über Content Model API)
+          ↓
+      Chat Model
+      (Provider-spezifische Implementierung)
 ```
 
-Bei der UI gibt es grundsätzlich drei Wege: Erstens eine selbst gebaute, statische Seite direkt in Spring Boot, zweitens ein eigener Rich Client (z. B. React, Vue oder Angular) und drittens wiederverwendbare Chat-UI-Bausteine aus bestehenden Frameworks. Für das Training starten wir bewusst mit der einfachen statischen Variante, weil sie die technischen Grundlagen transparent macht.
+Für die UI gibt es grundsätzlich drei Wege: erstens eine selbst gebaute, statische Seite direkt in Spring Boot, zweitens ein eigener Rich Client (z. B. React, Vue oder Angular) und drittens wiederverwendbare Chat-UI-Bausteine aus bestehenden Frameworks. Für das Training starten wir bewusst mit der einfachen statischen Variante, weil sie die technischen Grundlagen transparent macht.
 
 Mögliche UI-Varianten:
 
@@ -53,39 +56,24 @@ src/main/resources/static/
     chat.html
 ```
 
-
-## Configuration
-
-Wir verwenden eine zentrale CORS-Konfiguration, damit Freigaben für Origins und Methoden an einer Stelle gepflegt werden und nicht über einzelne `@CrossOrigin`-Annotationen im Code verteilt sind. Für produktive Szenarien sollten konkrete Origins statt `*` freigegeben werden.
-
-Beispiel für eine zentrale CORS-Konfiguration in Spring MVC:
+Die statische HTML-Seite kommuniziert mit einem REST-Endpunkt im Backend, um die Chat-Anfragen zu verarbeiten. Der Controller reicht die Anfrage an den Service weiter und gibt die Antwort des AI-Modells zurück:
 
 ```java
-@Configuration
-public class WebConfiguration implements WebMvcConfigurer {
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:8080")
-                .allowedMethods("GET", "POST");
-    }
+@PostMapping
+public Map<String, String> chat(@RequestBody Map<String, String> payload) {
+    String message = payload.get("message");
+    var result = insuranceChatService.chatService(message);
+    return Map.of("reply", result);
 }
 ```
 
-Die Basiskonfiguration bleibt weiterhin in `application.yaml`:
-
-```yaml
-spring:
-  application:
-    name: spring-ai-assistent
-```
-
+Diese Methode empfängt die Benutzer-Eingabe als JSON, leitet sie an den Service weiter und gibt die Antwort des AI-Modells als JSON-Antwort an die UI zurück.
 
 ## Test
+
+Im folgenden wollen wir nun prüfen, ob unser User Interface funktioniert. 
 
 1. Build ausführen: `mvn clean package`
 2. Anwendung starten: `mvn spring-boot:run`
 3. Browser öffnen und Seite aufrufen: `http://localhost:8080`
 4. UI-Interaktion prüfen (Eingaben, Buttons, Antwortdarstellung)
-5. Browser-DevTools prüfen (Netzwerk-Requests, HTTP-Status, CORS)

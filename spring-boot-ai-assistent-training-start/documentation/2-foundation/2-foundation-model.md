@@ -1,10 +1,38 @@
-# Spring AI Training - Foundation Model
+# Spring Boot AI Foundation Model Training
 
 ## Ziel
 
 Ziel dieser Einheit ist es, den grundsätzlichen Aufbau des Spring AI **Model API** zu verstehen, das für den eigenen Use Case passende Modell auszuwählen und es in die Anwendung einzubinden. 
 
 ## Architecture
+
+Die typische Schicht-Architektur einer Anwendung mit Spring AI:
+
+- **User Interface**: Nimmt Benutzereingaben entgegen und zeigt Antworten an.
+- **Controller**: Stellt REST-Endpunkte bereit und leitet Requests an den Service weiter.
+- **Service**: Kapselt die Business-Logik und orchestriert den AI-Aufruf.
+- **Chat Client**: Bietet das Fluent API und vereinfacht die Kommunikation mit dem Modell.
+- **Chat Model**: Führt den eigentlichen Modellaufruf beim gewählten Provider aus.
+
+```text
+       User Interface
+       (Web UI)
+            ↓
+       Controller
+       (REST Endpoints)
+            ↓
+       Service
+       (Business Logic)
+            ↓
+       Chat Client
+       (Abstraction über Content Model API)
+            ↓
+       **Chat Model**
+       **(Provider-spezifische Implementierung)**
+```
+
+**Fokus dieser Einheit:** Wir beschäftigen uns zunächst mit dem **Chat Model**, der untersten Schicht. In späteren Lektionen erweitern wir das Verständnis auf die höheren Schichten. 
+
 
 Spring AI definiert ein dreistufiges Model API, das einen flexiblen und provider-unabhängigen Zugriff auf verschiedene AI-Modelle ermöglicht.
 
@@ -36,24 +64,6 @@ Das Spring AI Model API ist in drei Ebenen aufgebaut:
 **Provider Model API** enthält die konkreten Implementierungen für spezifische Anbieter wie Ollama, OpenAI oder Anthropic.
 
 > **Wichtig:** Der große Vorteil dieser Architektur ist die Flexibilität: Die Anwendung kann gegen das Content Model API programmiert werden, ohne sich an einen konkreten Modell-Anbieter zu binden. Ein Anbieterwechsel erfordert nur eine Konfigurationsänderung.
-
-Die typische Schicht-Architektur einer Anwendung mit Spring AI:
-
-```text
-       Controller
-       (REST Endpoints)
-            ↓
-       Service
-       (Business Logic)
-            ↓
-       Chat Client
-       (Abstraction über Content Model API)
-            ↓
-       Chat Model
-       (Provider-spezifische Implementierung)
-```
-
-**Fokus dieser Einheit:** Wir beschäftigen uns zunächst mit dem **Chat Model**, der untersten Schicht. In späteren Lektionen erweitern wir das Verständnis auf die höheren Schichten. 
 
 
 
