@@ -20,6 +20,7 @@ public class InsuranceAssistantConfiguration {
     @Value("classpath:/systemPrompt.st")
     private Resource systemPromptResource;
 
+
     @Bean
     public ChatClient createClient(ChatClient.Builder chatClientBuilder,ChatMemory chatMemory) {
 

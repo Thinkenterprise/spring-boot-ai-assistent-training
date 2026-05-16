@@ -2,19 +2,33 @@
 
 ## Ziel
 
-Ziel dieser Einheit ist es, **Tools** in Spring AI zu verstehen und zu implementieren. Tools ermöglichen es, das Modell mit aktuellen und unternehmensspezifischen Daten anzureichern, die nicht Teil des Trainingswissens sind.
+Ziel dieser Einheit ist es, **Tools** in Spring AI zu verstehen und zu implementieren. 
 
 
-## Motivation
+## Domain
 
-Die Modelle sind mit Daten aus der Vergangenheit trainiert und kennen daher keine aktuellen Informationen wie die aktuelle Uhrzeit, Börsenkurse oder unternehmensspezifische Daten wie Kundenstatus oder Vertragsinformationen.
+ToDo: 
+- LLMs wurden mit Welt Wissen trainiert 
+- LLMs kennen nicht die Daten aus einer Domäne z.B. Kundendaten oder Produktdaten einer Versicherung 
+- Tools können Daten aus einer Domäne z.B. einem Unternehmen lesen und dem Modell bereitstellen 
+- Beispielsweise Produkt oder Kundendaten aus einer Datenbank lesen 
+- Daten aus einem LLM können nicht der Domäne bereitgestellt werden 
+- Tools erweitern LLMs da Tools aktuelle Daten aus dem LLM über Tools in die Domäne Schreiben können 
+- Tools können beispielsweise Änderungen in den Kundendaten in eine Datenbank schreiben 
 
-Mit **Tools** können wir das Modell mit solchen Daten anreichern. Tools können Daten lesen (z. B. Kundenstatus aus einer Datenbank) oder schreiben (z. B. Vertragsstatus aktualisieren).
 
 > **Wichtig:** Das Modell wählt das passende Tool anhand seiner Beschreibung und der aktuellen Anfrage selbst aus. Wenn ein Tool ausgewählt wurde, ruft Spring AI die entsprechende Methode automatisch auf und gibt das Ergebnis an das Modell zurück.
 
 
 ## Architecture
+
+ToDo: 
+
+- Beschreibe hier bitte wie der Tool Aufruf grob funktioniert 
+- Hier ist mir wichtig, dass das Tool eine Tool Beschreibung erhält 
+- Das Modell entscheidet werlches Tool aufgrufen werden soll 
+- Die AI Anwendung für den Aufruf des Tools verantwortlich ist 
+- Das Modell die Antwort zur weiteren Verarbeitung verwenden kann. 
 
 ```text
 +------------------+    1. Anfrage    +------------------+
