@@ -1,12 +1,7 @@
 package com.thinkenterprise.controller;
 
-import java.net.URI;
 import java.util.Map;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ProblemDetail;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,13 +21,14 @@ public class InsuranceAssistantController {
 
     @PostMapping("console")
     public String chat(@RequestBody String input) {
-        return insuranceChatService.chatService(input);
+        return insuranceChatService.chatServiceWithoutMemory(input);
     }
 
     @PostMapping
     public Map<String, String> chat(@RequestBody Map<String, String> payload) {
         String message = payload.get("message");
-        var result = insuranceChatService.chatService(message);
+        String conversationId = payload.get("conversationId");
+        var result = insuranceChatService.chatService(message,conversationId);
         return Map.of("reply", result);
     }
 

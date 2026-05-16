@@ -113,13 +113,13 @@ Ein asynchroner Aufruf erfolgt über `stream()`. Die Antwort wird dabei Stück f
 ```java
 // Direkter Zugriff auf den Textstrom
 Flux<String> stream = chatClient
-    .prompt(new Prompt(new UserMessage("Erkläre fondsgebundene Lebensversicherungen.")))
+    .prompt("Erkläre fondsgebundene Lebensversicherungen.")
     .stream()
     .content();
 
 // Zugriff auf den vollständigen ChatResponse-Strom (z. B. inkl. Metadaten)
 Flux<ChatResponse> responses = chatClient
-    .prompt(new Prompt(new UserMessage("Erkläre fondsgebundene Lebensversicherungen.")))
+    .prompt("Erkläre fondsgebundene Lebensversicherungen.")
     .stream()
     .chatResponse();
 ```

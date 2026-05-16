@@ -239,6 +239,15 @@
     const input = document.getElementById('input');
     const sendButton = document.getElementById('send');
 
+    // UUID generieren
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
     function renderSessions() {
       sessionsDiv.innerHTML = '';
       for (let id in sessions) {
@@ -295,7 +304,7 @@
     }
 
     function newSession() {
-      const id = Date.now().toString();
+      const id = generateUUID();
       sessions[id] = { name: `Chat ${Object.keys(sessions).length + 1}`, messages: [] };
       currentSessionId = id;
       saveSessions();
@@ -321,13 +330,14 @@
       input.value = '';
       input.style.height = 'auto';
 
-
-
       try {
         const res = await fetch(apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: text })
+          body: JSON.stringify({
+            message: text,
+            conversationId: currentSessionId
+          })
         });
 
         if (!res.ok) {

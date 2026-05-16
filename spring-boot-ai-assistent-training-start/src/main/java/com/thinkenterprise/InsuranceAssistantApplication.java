@@ -1,7 +1,10 @@
 package com.thinkenterprise;
 
+import java.util.Map;
+
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -34,8 +37,18 @@ public class InsuranceAssistantApplication implements ApplicationRunner {
 		String answerClient = chatClient.prompt("Hello").call().content();
 		System.out.println(answerClient);
 
-		String answerService = insuranceAssistantService.chatService("Hello");
+
+		String answerService = insuranceAssistantService.chatServiceWithoutMemory("Hello");
 		System.out.println(answerService);
+
+		String answerClientParameter = chatClient.prompt(PromptTemplate.builder()
+																	   .template("Hallo ich bin der Makler mit dem Namen {brokerName}")
+																	   .variables(Map.of("brokerName", "Best Broker Ever"))
+																	   .build()
+																	   .create())
+																	   .call()
+																	   .content();
+		System.out.println(answerClientParameter);
 	}
 
 }
