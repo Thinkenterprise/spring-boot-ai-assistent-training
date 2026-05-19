@@ -14,6 +14,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 
+import com.thinkenterprise.ai.tools.InsuranceCustomerDetailsTool;
+
 @Configuration
 public class InsuranceAssistantConfiguration {
 
@@ -22,12 +24,14 @@ public class InsuranceAssistantConfiguration {
 
 
     @Bean
-    public ChatClient createClient(ChatClient.Builder chatClientBuilder,ChatMemory chatMemory) {
+    public ChatClient createClient(ChatClient.Builder chatClientBuilder,ChatMemory chatMemory, 
+                                   InsuranceCustomerDetailsTool insuranceCustomerDetailsTool) {
 
         var chatClient = chatClientBuilder.defaultOptions(createChatOptions())
                                           .defaultSystem(createSystemPrompt().toString())
                                           .defaultAdvisors(createChatMemoryAdvisor(chatMemory))
                                           .defaultAdvisors(a -> a.param(ChatMemory.CONVERSATION_ID, "InsuranceAssistent"))
+                                          .defaultTools(insuranceCustomerDetailsTool)
                                           .build();
         return chatClient;
     }
@@ -40,7 +44,8 @@ public class InsuranceAssistantConfiguration {
 
         return SystemPromptTemplate.builder()
                                    .resource(systemPromptResource)
-                                   .variables(Map.of("assistentName", "AI Insurance Assistent"))
+                                   .variables(Map.of("assistentName", "AI Insurance Assistent",
+                                                     "getCustomerDetails", "getCustomerDetails"))
                                    .build()
                                    .create();
     }

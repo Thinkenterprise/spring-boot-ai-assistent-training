@@ -7,14 +7,14 @@ Ziel dieser Einheit ist es, **Tools** in Spring AI zu verstehen und zu implement
 
 ## Domain
 
-ToDo: 
-- LLMs wurden mit Welt Wissen trainiert 
-- LLMs kennen nicht die Daten aus einer Domäne z.B. Kundendaten oder Produktdaten einer Versicherung 
-- Tools können Daten aus einer Domäne z.B. einem Unternehmen lesen und dem Modell bereitstellen 
-- Beispielsweise Produkt oder Kundendaten aus einer Datenbank lesen 
-- Daten aus einem LLM können nicht der Domäne bereitgestellt werden 
-- Tools erweitern LLMs da Tools aktuelle Daten aus dem LLM über Tools in die Domäne Schreiben können 
-- Tools können beispielsweise Änderungen in den Kundendaten in eine Datenbank schreiben 
+LLMs wurden mit umfassendem Weltwissen trainiert, kennen aber nicht die spezifischen Daten aus einer Domäne — beispielsweise Kundendaten, Produktinformationen oder Verträge aus einem Unternehmen. **Tools** schließen diese Lücke: Sie ermöglichen es dem AI-Assistenten, externe Datenquellen zu lesen und zu schreiben.
+
+Im Insurance Use Case nutzen Tools beispielsweise:
+- Kundendaten aus einer Datenbank abrufen
+- Produktinformationen bereitstellen
+- Änderungen an Verträgen speichern
+
+Das Modell entscheidet selbst, welches Tool aufgrund der Anfrage und der Tool-Beschreibung aufgerufen werden soll. 
 
 
 > **Wichtig:** Das Modell wählt das passende Tool anhand seiner Beschreibung und der aktuellen Anfrage selbst aus. Wenn ein Tool ausgewählt wurde, ruft Spring AI die entsprechende Methode automatisch auf und gibt das Ergebnis an das Modell zurück.
@@ -22,13 +22,18 @@ ToDo:
 
 ## Architecture
 
-ToDo: 
+Der Tool-Aufruf erfolgt nach einem definierten Ablauf: Das Modell analysiert die Anfrage, wählt basierend auf der Tool-Beschreibung das passende Tool aus, und Spring AI ruft die entsprechende Methode auf. Das Tool liefert die Daten zurück, die das Modell in seine Antwort einbezieht.
 
-- Beschreibe hier bitte wie der Tool Aufruf grob funktioniert 
-- Hier ist mir wichtig, dass das Tool eine Tool Beschreibung erhält 
-- Das Modell entscheidet werlches Tool aufgrufen werden soll 
-- Die AI Anwendung für den Aufruf des Tools verantwortlich ist 
-- Das Modell die Antwort zur weiteren Verarbeitung verwenden kann. 
+**Ablauf:**
+
+1. **Anfrage** an das Modell
+2. **Tool-Auswahl** durch das Modell basierend auf Beschreibung und Anfrage
+3. **Tool-Aufruf** durch Spring AI mit den vom Modell extrahierten Parametern
+4. **Daten-Abruf** aus Service/Datenbank
+5. **Ergebnis** zurück an das Modell
+6. **Antwort-Generierung** mit den bereitgestellten Daten
+
+**Schaubild:**
 
 ```text
 +------------------+    1. Anfrage    +------------------+
@@ -73,34 +78,63 @@ Die `@Tool`-Annotation markiert eine Methode als Tool. Die Beschreibung (`descri
 @Component
 public class InsuranceCustomerDetailsTool {
 
-    private final InsuranceCustomerService insuranceCustomerService;
+    static final Logger logger = LoggerFactory.getLogger(InsuranceCustomerDetailsTool.class);
 
+    private InsuranceCustomerService insuranceCustomerService;
+   
     public InsuranceCustomerDetailsTool(InsuranceCustomerService insuranceCustomerService) {
-        this.insuranceCustomerService = insuranceCustomerService;
+       this.insuranceCustomerService=insuranceCustomerService;
     }
 
-    @Tool(name = "get_CustomerDetails",
-          description = "Gibt die Kundendaten eines Versicherungskunden zurück.")
-    public InsuranceCustomer getCustomerDetails(
-            @ToolParam(description = "Der Name des Kunden") String customerName) {
-        return insuranceCustomerService.findByName(customerName);
+    @Tool(name = "getCustomerDetails", description = "Ermittelt Kundendaten eines Kunden")
+    public Customer getCustomerDetails(@ToolParam(required = true, description = "Name des Kunden") String name) {
+        return insuranceCustomerService.getCustomerDetails(name);
     }
+
 }
 ```
 
 ### Registrierung am Chat Client
-
-Das Tool wird einmalig am `ChatClient.Builder` registriert:
+Das Tool wird einmalig am `ChatClient.Builder` registriert
 
 ```java
-@Bean
-public ChatClient createChatClient(ChatClient.Builder builder,
-                                   InsuranceCustomerDetailsTool customerDetailsTool) {
-    return builder
-        .defaultTools(customerDetailsTool)
-        .build();
-}
+@Configuration
+public class InsuranceAssistantConfiguration {
+
+    @Bean
+    public ChatClient createClient(ChatClient.Builder chatClientBuilder,ChatMemory chatMemory, 
+                                   InsuranceCustomerDetailsTool insuranceCustomerDetailsTool) {
+
+        var chatClient = chatClientBuilder.defaultOptions(createChatOptions())
+                                          .defaultSystem(createSystemPrompt().toString())
+                                          .defaultAdvisors(createChatMemoryAdvisor(chatMemory))
+                                          .defaultAdvisors(a -> a.param(ChatMemory.CONVERSATION_ID, "InsuranceAssistent"))
+                                          .defaultTools(insuranceCustomerDetailsTool)
+                                          .build();
+        return chatClient;
+    }
 ```
+
+> **Hinweis:** Tools können einmalig mit `defaultTools()` registriert werden, oder auch dynamisch beim Aufruf mit `.tools()` übergeben werden, falls nur für einzelne Anfragen ein Tool benötigt wird.
+
+### System Prompt 
+
+Das System Prompt kann das Modell anweisen, welche Tools verfügbar sind und in welchen Situationen diese eingesetzt werden. Die Datei `systemPrompt.st` enthält beispielsweise:
+
+```
+# Verfügbare Tools
+Der Assistent hat Zugriff auf das Tool "getCustomerDetails", um Kundendaten zu ermitteln.
+Das Tool soll verwendet werden, wenn der Makler nach Informationen zu einem Kunden fragt.
+```
+
+Das Template wird mit Variablen befüllt:
+
+```java
+.variables(Map.of(
+    "assistentName", "AI Insurance Assistent",
+    "availableTools", "getCustomerDetails - Kundendaten abrufen"
+))
+``` 
 
 
 ## Test
