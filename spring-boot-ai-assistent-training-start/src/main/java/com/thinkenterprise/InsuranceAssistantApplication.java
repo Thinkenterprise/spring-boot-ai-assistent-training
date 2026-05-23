@@ -6,15 +6,16 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 
 import com.thinkenterprise.service.InsuranceAssistantService;
 
 @SpringBootApplication
-public class InsuranceAssistantApplication implements ApplicationRunner {
+public class InsuranceAssistantApplication  {
 
 	@Autowired
 	ChatModel chatModel;
@@ -25,12 +26,16 @@ public class InsuranceAssistantApplication implements ApplicationRunner {
 	@Autowired
 	InsuranceAssistantService insuranceAssistantService;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) {∏
 		SpringApplication.run(InsuranceAssistantApplication.class, args);
 	}
 
-	@Override
-	public void run(ApplicationArguments args) throws Exception {
+	@Profile("init")
+	@Bean
+	public ApplicationRunner run() {
+
+		return args -> {
+
 		String answer = chatModel.call("Hello");
 		System.out.println(answer);
 
@@ -49,6 +54,8 @@ public class InsuranceAssistantApplication implements ApplicationRunner {
 																	   .call()
 																	   .content();
 		System.out.println(answerClientParameter);
+			
+		};
 	}
 
 }

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import com.thinkenterprise.domain.Customer;
 
 @Service
-public class InsuranceCustomerService {
+public class InsuranceAssistentCustomerService {
 
     public Customer getCustomerDetails(String Name) {
        return new Customer("IN2000", "Michael", LocalDate.of(1970, 4, 14));

@@ -1,12 +1,20 @@
+thinkenterprise:
+  exception: true
 spring:
   application:
     name: spring-ai-assistent
+  profiles:
+    active:
+    - Nothing
+
   ai:
     ollama:
       chat:
-        model: llama3.2
+        model: llama3.2 
         options:
           max-tokens: 512
+        internal-tool-execution-enabled: true
         temperature: 0.7
         num-ctx: 2048
+    
     

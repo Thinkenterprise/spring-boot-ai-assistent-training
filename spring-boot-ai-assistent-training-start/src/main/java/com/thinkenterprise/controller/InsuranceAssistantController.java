@@ -1,12 +1,18 @@
 package com.thinkenterprise.controller;
 
+import java.net.URI;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.thinkenterprise.ai.tools.InsuranceException;
 import com.thinkenterprise.service.InsuranceAssistantService;
 
 @RestController
@@ -31,5 +37,16 @@ public class InsuranceAssistantController {
         var result = insuranceChatService.chatService(message,conversationId);
         return Map.of("reply", result);
     }
+
+     @ExceptionHandler(value = InsuranceException.class)
+	ResponseEntity<ProblemDetail> handleException(InsuranceException exception) {
+		
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+		problemDetail.setType(URI.create("http://thinkenterprise.com/InsuranceException"));
+		problemDetail.setTitle("Tool Execution Problem");
+		problemDetail.setDetail(exception.getMessage());
+
+		return new ResponseEntity<ProblemDetail>(problemDetail, HttpStatus.BAD_REQUEST);
+	}
 
 }

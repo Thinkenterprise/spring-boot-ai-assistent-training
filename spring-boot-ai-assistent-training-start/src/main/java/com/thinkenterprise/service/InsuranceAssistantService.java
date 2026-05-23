@@ -1,5 +1,8 @@
 package com.thinkenterprise.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.model.ChatResponse;
@@ -18,6 +21,7 @@ public class InsuranceAssistantService {
         return chatClient
             .prompt(input)
             .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, conversationId))
+            .toolContext(new HashMap<String, Object>(Map.of("session", conversationId)))
             .call()
             .content();
     }

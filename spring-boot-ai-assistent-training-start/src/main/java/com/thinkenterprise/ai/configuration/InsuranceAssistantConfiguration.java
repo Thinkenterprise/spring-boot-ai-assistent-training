@@ -1,5 +1,6 @@
 package com.thinkenterprise.ai.configuration;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.ai.chat.client.ChatClient;
@@ -10,13 +11,16 @@ import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 
-import com.thinkenterprise.ai.tools.InsuranceCustomerDetailsTool;
+import com.thinkenterprise.ai.tools.InsuranceAssistantCustomerDetailsTool;
+import com.thinkenterprise.ai.tools.InsuranceProperties;
 
 @Configuration
+@EnableConfigurationProperties(InsuranceProperties.class)
 public class InsuranceAssistantConfiguration {
 
     @Value("classpath:/systemPrompt.st")
@@ -25,13 +29,14 @@ public class InsuranceAssistantConfiguration {
 
     @Bean
     public ChatClient createClient(ChatClient.Builder chatClientBuilder,ChatMemory chatMemory, 
-                                   InsuranceCustomerDetailsTool insuranceCustomerDetailsTool) {
+                                   InsuranceAssistantCustomerDetailsTool insuranceCustomerDetailsTool) {
 
         var chatClient = chatClientBuilder.defaultOptions(createChatOptions())
                                           .defaultSystem(createSystemPrompt().toString())
                                           .defaultAdvisors(createChatMemoryAdvisor(chatMemory))
                                           .defaultAdvisors(a -> a.param(ChatMemory.CONVERSATION_ID, "InsuranceAssistent"))
                                           .defaultTools(insuranceCustomerDetailsTool)
+                                          .defaultToolContext(new HashMap<String, Object>(Map.of("session", "No Id")))
                                           .build();
         return chatClient;
     }
