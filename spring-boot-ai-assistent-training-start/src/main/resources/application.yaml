@@ -8,6 +8,8 @@ spring:
     - Nothing
 
   ai:
+    tools:
+      throw-exception-on-error: true
     ollama:
       chat:
         model: llama3.2 
@@ -16,5 +18,3 @@ spring:
         internal-tool-execution-enabled: true
         temperature: 0.7
         num-ctx: 2048
-    
-    
