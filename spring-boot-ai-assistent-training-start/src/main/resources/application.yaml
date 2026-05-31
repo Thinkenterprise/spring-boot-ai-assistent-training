@@ -1,5 +1,9 @@
 thinkenterprise:
   exception: true
+logging:
+  level:
+    org.apache.pdfbox: ERROR
+
 spring:
   application:
     name: spring-ai-assistent

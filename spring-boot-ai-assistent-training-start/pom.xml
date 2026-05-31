@@ -36,14 +36,23 @@
     </dependencyManagement>
 
     <dependencies>
+        <!--  Foundation Setup Web Frontend  -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <!--  Foundation Setup Model  -->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-model-ollama</artifactId>
         </dependency>    
+       
+        <!-- Enterprise RAG ETL PDF Reader -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-pdf-document-reader</artifactId>
+        </dependency>
     </dependencies> 
 
     <repositories>

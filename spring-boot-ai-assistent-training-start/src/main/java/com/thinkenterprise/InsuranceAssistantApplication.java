@@ -26,7 +26,7 @@ public class InsuranceAssistantApplication  {
 	@Autowired
 	InsuranceAssistantService insuranceAssistantService;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) {	
 		SpringApplication.run(InsuranceAssistantApplication.class, args);
 	}
 
