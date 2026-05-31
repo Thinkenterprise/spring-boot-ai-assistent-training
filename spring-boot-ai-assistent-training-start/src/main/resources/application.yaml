@@ -2,23 +2,39 @@ thinkenterprise:
   exception: true
 logging:
   level:
-    org.apache.pdfbox: ERROR
-
+    "[org.apache.pdfbox]": ERROR
 spring:
   application:
     name: spring-ai-assistent
   profiles:
     active:
     - Nothing
-
+  docker:
+    compose:
+      enabled: true
+      stop:
+        command: down
+      start:
+        command: up
   ai:
     tools:
       throw-exception-on-error: true
     ollama:
       chat:
-        model: llama3.2 
-        options:
-          max-tokens: 512
+        model: llama3.2
         internal-tool-execution-enabled: true
         temperature: 0.7
         num-ctx: 2048
+        num-predict: 512
+      base-url: http://localhost:11434
+      embedding:
+        model: mxbai-embed-large
+      init:
+       pull-model-strategy: always
+       embedding:
+         additional-models:
+          - mxbai-embed-large
+    vectorstore:
+      qdrant:
+        collection-name: insurance  
+        initialize-schema: true

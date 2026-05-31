@@ -36,6 +36,9 @@
     </dependencyManagement>
 
     <dependencies>
+
+
+
         <!--  Foundation Setup Web Frontend  -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -47,11 +50,30 @@
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-model-ollama</artifactId>
         </dependency>    
+
+        <!-- Enterprise Tool Exception Property Metadata -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
        
         <!-- Enterprise RAG ETL PDF Reader -->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-pdf-document-reader</artifactId>
+        </dependency>
+
+        <!-- Enterprise RAG Qdrant Vector Database -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-vector-store-qdrant</artifactId>
+        </dependency>
+
+        <!-- Enterprise RAG Qdrant Vector Database Start with Docker Compose -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-docker-compose</artifactId>
         </dependency>
     </dependencies> 
 
