@@ -75,6 +75,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-docker-compose</artifactId>
         </dependency>
+
+        <!-- Enterprise RAG Advisor -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-rag</artifactId>
+        </dependency>
+
+
+
+
+
     </dependencies> 
 
     <repositories>

@@ -1,5 +1,5 @@
 thinkenterprise:
-  exception: true
+  exception: false
 logging:
   level:
     "[org.apache.pdfbox]": ERROR
