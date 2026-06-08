@@ -28,7 +28,7 @@ spring:
         num-predict: 512
       base-url: http://localhost:11434
       embedding:
-        model: mxbai-embed-large
+        model: mxbai-embed-large        
       init:
        pull-model-strategy: always
        embedding:

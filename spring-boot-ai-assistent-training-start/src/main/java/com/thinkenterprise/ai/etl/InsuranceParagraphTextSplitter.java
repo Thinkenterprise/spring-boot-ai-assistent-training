@@ -1,7 +1,6 @@
 package com.thinkenterprise.ai.etl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.ai.transformer.splitter.TextSplitter;
@@ -9,7 +8,6 @@ import org.springframework.ai.transformer.splitter.TextSplitter;
 public class InsuranceParagraphTextSplitter extends TextSplitter {
 
     private static final int MAX_CHUNK_SIZE = 800;
-    private static final int CHARS_PER_TOKEN = 4;
 
     @Override
     protected List<String> splitText(String text) {

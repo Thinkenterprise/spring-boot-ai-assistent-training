@@ -17,9 +17,19 @@ Im Kontext der Versicherungsanwendung müssen Versicherungsbedingungen aus PDF-D
 Dies ermöglicht dem AI-Assistenten, relevante Versicherungsbedingungen in Echtzeit zu finden und in seine Antworten einzubeziehen.
 
 
+
+
 ## Architecture
 
-Spring AI bietet ein **ApplicationRunner**-Pattern für die ETL-Pipeline:
+**ETL ist ein Data Engineering Prozess**: ETL ist nicht nur eine technische Implementierung, sondern ein unternehmenseigener Prozess der Datenaufbereitung. Datenteams und Data Engineers sind typischerweise verantwortlich für die Gestaltung und Umsetzung von ETL-Pipelines. Sie definieren, welche Datenquellen relevant sind, welche Transformationsregeln angewendet werden und wie Daten in die Produktionsumgebung gelangen. Spring AI bietet dafür nur die technischen Bausteine — die Architektur und Orchestrierung ist Aufgabe des Unternehmens.
+
+**Spring AI ETL Abstraktion**: Spring AI folgt einem klassischen ETL-Muster mit drei Komponenten:
+
+- **Reader** (Extract): Liest Rohdaten aus verschiedenen Quellen (PDF, Datenbanken, Web APIs)
+- **Processor** (Transform): Transformiert Daten in verwertbare Form (Splitting, Filterung, Anreicherung)
+- **Writer** (Load): Schreibt verarbeitete Daten in Zielssysteme (Vector Store, Datenbanken)
+
+Spring AI bietet dafür abstrakte Klassen und konkrete Implementierungen:
 
 ```text
 Anwendungsstart
@@ -28,24 +38,24 @@ InsuranceProcessEtlPipeline (@Configuration)
         ↓
 run() - ApplicationRunner Bean
         ↓
-PagePdfDocumentReader
+[READER] PagePdfDocumentReader
   └─ Extrahiert Pages aus PDF
         ↓
-InsuranceParagraphTextSplitter
-  └─ Teilt Pages in Paragraphen
+[PROCESSOR] InsuranceParagraphTextSplitter
+  └─ Teilt Pages in sinnvolle Chunks
         ↓
-Vector-Datenbank (später)
+[WRITER] Vector-Datenbank (später)
   └─ Speichert Embeddings
 ```
 
 **Kernkomponenten:**
 
-| Komponente | Funktion |
-|-----------|----------|
-| `PagePdfDocumentReader` | Liest PDF-Dateien ein und extrahiert Seiten als Dokumente |
-| `TextSplitter` | Spring AI Base-Klasse für Text-Segmentierung |
-| `InsuranceParagraphTextSplitter` | Custom-Implementation, splittet nach Paragraphen-Grenzen |
-| `ApplicationRunner` | Spring Boot Hook, führt ETL beim Start aus |
+| Komponente | Funktion | Spring AI Abstraktion |
+|-----------|----------|----------------------|
+| `PagePdfDocumentReader` | Liest PDF-Dateien ein und extrahiert Seiten als Dokumente | DocumentReader |
+| `TextSplitter` | Spring AI Base-Klasse für Text-Segmentierung | Processor |
+| `InsuranceParagraphTextSplitter` | Custom-Implementation, splittet nach Paragraphen-Grenzen | TextSplitter |
+| `ApplicationRunner` | Spring Boot Hook, führt ETL beim Start aus | Orchestrator |
 
 
 ## Konfiguration
@@ -127,6 +137,12 @@ public class InsuranceParagraphTextSplitter extends TextSplitter {
 
 Dies ist besser als willkürliches Token-basiertes Splitting, da es **semantische Einheiten** (Paragraphen) bewahrt.
 
+**Context Window Limitation**: Crucially, Paragraphen dürfen nicht größer als das **Context Window** des Embedding-Modells sein. Das Modell `mxbai-embed-large` hat ein Kontext-Limit von ~512-1024 Tokens. Ist ein Paragraph größer, wirft das Embedding-Modell eine `AccessDeniedException`. Der `InsuranceParagraphTextSplitter` implementiert daher ein **Two-Level Splitting**: 
+
+1. Erst nach Paragraph-Grenzen (`\n\n`)
+2. Falls ein Paragraph > 800 Zeichen (~200 Tokens), wird er zusätzlich nach **Sätzen** aufgeteilt
+
+Dies verhindert das Context Window Overflow-Problem und garantiert, dass alle Chunks erfolgreich in Vektoren konvertiert werden können.   
 
 ## Test
 
