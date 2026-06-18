@@ -82,41 +82,50 @@
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-rag</artifactId>
         </dependency>
-        <!-- Test  Boot Test Support -->
+
+        <!-- Enterprise Test  Boot Test Support -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- Test Container for Spring Boot Support -->
+        <!-- Enterprise Test Container for Spring Boot Support -->
          <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-testcontainers</artifactId>
             <scope>test</scope>
         </dependency>
-         <!-- Test Container for Spring AI Support -->
+         <!-- Enterprise Test Container for Spring AI Support -->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-spring-boot-testcontainers</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- Enterprise Test Container JUnit Jupiter Support -->
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- Enterprise Test Container Qdrant Support -->
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>qdrant</artifactId>
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- Enterprise Test Container Qdrant Support -->
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>ollama</artifactId>
             <version>${testcontainers.version}</version>
             <scope>test</scope>
+        </dependency>
+        <!-- Advanced MCP Support -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-mcp-client</artifactId>
         </dependency>
 
     </dependencies> 

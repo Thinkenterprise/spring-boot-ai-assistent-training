@@ -1,5 +1,19 @@
-{"properties": [{
-  "name": "thinkenterprise.exception",
-  "type": "java.lang.String",
-  "description": "A description for 'thinkenterprise.exception'"
-}]}
+{
+  "properties": [
+    {
+      "name": "thinkenterprise.exception",
+      "type": "java.lang.String",
+      "description": "A description for 'thinkenterprise.exception'"
+    },
+    {
+      "name": "spring.ai.mcp.client.streamable-http.connections.webmvc-mcp-server.url",
+      "type": "java.lang.String",
+      "description": "URL endpoint for Streamable HTTP communication with the MCP server."
+    },
+    {
+      "name": "spring.ai.mcp.client.streamable-http.connections.webmvc-mcp-server.endpoint",
+      "type": "java.lang.String",
+      "description": "Optional path endpoint on the MCP server (e.g. /mcp)."
+    }
+  ]
+}

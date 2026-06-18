@@ -1,4 +1,4 @@
-# Advanced Monitoring
+# Advanced MCP
 
 Ziel ist es eine Dokumentation für eine Coding Übung für Spring AI zu erstellen
 
@@ -17,16 +17,16 @@ Bitte achte auf die folgenden Punkte
 ToDo: Bitte beschreibe kurz in 2-3 Sätzen das Ziel der Übung
 
 ## Motivation
-ToDo: Warum ist Monitoring und Observability für AI-Assistenten besonders wichtig
+ToDo: Wofür ist das Model Context Protocol gut und warum ist es im Kontext von Spring AI relevant
 
 ## Architektur
-ToDo: Wie ist Observability in Spring AI aufgebaut - beschreibe Logs, Metriken und Tracing
+ToDo: Wie ist MCP in Spring AI aufgebaut - beschreibe die Kommunikation zwischen MCP Client und MCP Server sowie die drei Fähigkeitstypen
 
 ## Libraries
 ToDo: Welche Bibliotheken müssen über die POM eingebunden werden und warum
 
-## Configuration
-ToDo: Welche Konfiguration ist notwendig - Logging, Metriken und Tracing in der application.yaml
+## Implementation
+ToDo: Was muss alles implementiert werden, damit die Übung durchgeführt werden kann. Das kann Konfiguration in den Property Dateien sein, Bean Configuration oder konkrete Konfiguration
 
 ## Test
 ToDo: Hier möchte ich das Coding testen. Zähle die Schritte 1 .. n auf. Nur kurze Aufzählungen mit einem Satz

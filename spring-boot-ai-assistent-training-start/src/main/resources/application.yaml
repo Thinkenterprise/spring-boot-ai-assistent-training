@@ -38,3 +38,21 @@ spring:
       qdrant:
         collection-name: insurance  
         initialize-schema: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: mcp
+  ai:
+    mcp:
+      client:
+        enabled: true
+        name: insurance-company-tool-mcp-client
+        version: 1.0.0
+        request-timeout: 30s
+        type: SYNC  
+        streamable-http:
+          connections:
+            webmvc-mcp-server:
+              url: http://localhost:8081
