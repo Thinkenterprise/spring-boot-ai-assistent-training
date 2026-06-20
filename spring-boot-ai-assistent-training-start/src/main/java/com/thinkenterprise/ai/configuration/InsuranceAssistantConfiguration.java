@@ -12,11 +12,14 @@ import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.ai.rag.generation.augmentation.ContextualQueryAugmenter;
 import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
+import org.springframework.ai.tool.ToolCallbackProvider;
+import org.springframework.ai.tool.method.MethodToolCallbackProvider;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 
 import com.thinkenterprise.ai.rag.InsuranceDocumentProcessor;
@@ -32,26 +35,38 @@ public class InsuranceAssistantConfiguration {
     private Resource systemPromptResource;
 
     @Bean
+    @Profile("!mcp")
+    public ToolCallbackProvider localToolCallbackProvider(
+            InsuranceAssistantCustomerDetailsTool insuranceCustomerDetailsTool) {
+        return MethodToolCallbackProvider.builder()
+                .toolObjects(insuranceCustomerDetailsTool)
+                .build();
+    }
+
+    @Bean
     public ChatClient createClient(ChatClient.Builder chatClientBuilder,
             MessageChatMemoryAdvisor messageChatMemoryAdvisor,
-            InsuranceAssistantCustomerDetailsTool insuranceCustomerDetailsTool,
+            ToolCallbackProvider tools,
             RetrievalAugmentationAdvisor retrievalAugmentationAdvisor) {
 
         var chatClient = chatClientBuilder.defaultOptions(createChatOptions())
                 .defaultSystem(createSystemPrompt().toString())
                 .defaultAdvisors(messageChatMemoryAdvisor)
                 .defaultAdvisors(a -> a.param(ChatMemory.CONVERSATION_ID, "InsuranceAssistent"))
-                .defaultTools(insuranceCustomerDetailsTool)
+                .defaultTools(tools)
                 .defaultToolContext(new HashMap<String, Object>(Map.of("session", "No Id")))
                 .defaultAdvisors(retrievalAugmentationAdvisor)
                 .build();
         return chatClient;
     }
 
+
     @Bean
     public MessageChatMemoryAdvisor createChatMemoryAdvisor(ChatMemory chatMemory) {
         return MessageChatMemoryAdvisor.builder(chatMemory).build();
     }
+
+   
 
     private Prompt createSystemPrompt() {
 
