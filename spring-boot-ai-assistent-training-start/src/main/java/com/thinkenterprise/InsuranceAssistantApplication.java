@@ -5,10 +5,6 @@ import java.util.Map;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.PromptTemplate;
-import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
-import org.springframework.ai.model.tool.ToolCallingManager;
-import org.springframework.ai.tool.resolution.ToolCallbackResolver;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,14 +16,17 @@ import com.thinkenterprise.service.InsuranceAssistantService;
 @SpringBootApplication
 public class InsuranceAssistantApplication  {
 
-	@Autowired
-	ChatModel chatModel;
+	final ChatModel chatModel;
 
-	@Autowired
-	ChatClient chatClient;
+	final ChatClient chatClient;
 
-	@Autowired
-	InsuranceAssistantService insuranceAssistantService;
+	final InsuranceAssistantService insuranceAssistantService;
+
+	InsuranceAssistantApplication(InsuranceAssistantService insuranceAssistantService, ChatClient chatClient, ChatModel chatModel) {
+		this.insuranceAssistantService = insuranceAssistantService;
+		this.chatClient = chatClient;
+		this.chatModel = chatModel;
+	}
 
 	public static void main(String[] args) {	
 		SpringApplication.run(InsuranceAssistantApplication.class, args);

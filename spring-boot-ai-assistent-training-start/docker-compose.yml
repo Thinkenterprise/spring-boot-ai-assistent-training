@@ -2,10 +2,37 @@ services:
   qdrant:
     image: qdrant/qdrant:latest
     container_name: qdrant
+    profiles: ["vector"]
     ports:
       - "6333:6333"
       - "6334:6334"
     tmpfs:
       - /qdrant/storage
+
+  prometheus:
+    image: prom/prometheus:latest
+    profiles: ["monitoring"]
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - 9090:9090
+    networks:
+      - back-tier
+  zipkin:
+    image: 'openzipkin/zipkin:latest'
+    profiles: ["monitoring"]
+    ports:
+      - '9411:9411'
+
+volumes:
+  prometheus_data: {}
  
-  
+networks:
+  front-tier:
+  back-tier: 

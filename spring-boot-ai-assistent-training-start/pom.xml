@@ -39,7 +39,6 @@
     <dependencies>
 
 
-
         <!--  Foundation Setup Web Frontend  -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -50,7 +49,7 @@
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-model-ollama</artifactId>
-        </dependency>    
+        </dependency>
 
         <!-- Enterprise Tool Exception Property Metadata -->
         <dependency>
@@ -58,7 +57,7 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-       
+
         <!-- Enterprise RAG ETL PDF Reader -->
         <dependency>
             <groupId>org.springframework.ai</groupId>
@@ -89,18 +88,21 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <!-- Enterprise Test Container for Spring Boot Support -->
-         <dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-testcontainers</artifactId>
             <scope>test</scope>
         </dependency>
-         <!-- Enterprise Test Container for Spring AI Support -->
+
+        <!-- Enterprise Test Container for Spring AI Support -->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-spring-boot-testcontainers</artifactId>
             <scope>test</scope>
         </dependency>
+
         <!-- Enterprise Test Container JUnit Jupiter Support -->
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -108,6 +110,7 @@
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
+
         <!-- Enterprise Test Container Qdrant Support -->
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -115,6 +118,7 @@
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
+
         <!-- Enterprise Test Container Qdrant Support -->
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -122,13 +126,51 @@
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
+
         <!-- Advanced MCP Support -->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-mcp-client</artifactId>
         </dependency>
 
-    </dependencies> 
+        <!-- Advanced Observability Support -->
+
+        <!-- Actuator as base Observability -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- Metrics for Standard Premetheus Server an Protokoll  -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
+        <!-- Trace with OpenTelemetry Bridge (Spring Boot 4 modularized Autoconfiguration) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-micrometer-tracing-opentelemetry</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-otel</artifactId>
+        </dependency>
+
+        <!-- Zipkin Autoconfiguration (Sender/Connection Details) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-zipkin</artifactId>
+        </dependency>
+
+        <!-- Zipkin Export for OpenTelemetry -->
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-zipkin</artifactId>
+        </dependency>
+
+
+    </dependencies>
 
     <repositories>
         <repository>

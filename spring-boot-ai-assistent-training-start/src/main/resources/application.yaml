@@ -12,6 +12,8 @@ spring:
   docker:
     compose:
       enabled: true
+      profiles:
+        active: vector, monitoring
       stop:
         command: down
       start:
@@ -41,6 +43,26 @@ spring:
     mcp:
       client:
         enabled: false
+management:
+  endpoints:
+    access:
+      default: unrestricted
+    web:
+      exposure:
+        include: "*"
+  tracing:
+    sampling:
+      probability: 1.0
+  observations:
+    annotations:
+      enabled: true   
+  httpexchanges:
+    recording:
+      enabled: true
+
+
+
+
 ---
 spring:
   config:
