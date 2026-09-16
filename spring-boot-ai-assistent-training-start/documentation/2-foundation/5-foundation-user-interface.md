@@ -62,7 +62,8 @@ Die statische HTML-Seite kommuniziert mit einem REST-Endpunkt im Backend, um die
 @PostMapping
 public Map<String, String> chat(@RequestBody Map<String, String> payload) {
     String message = payload.get("message");
-    var result = insuranceChatService.chatService(message);
+    String conversationId = payload.get("conversationId");
+    var result = insuranceChatService.chatService(message, conversationId);
     return Map.of("reply", result);
 }
 ```

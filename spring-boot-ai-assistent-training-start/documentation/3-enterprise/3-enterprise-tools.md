@@ -72,22 +72,30 @@ Im Regelfall reicht **MaaT** aus.
 
 ### Method as a Tool (MaaT)
 
-Die `@Tool`-Annotation markiert eine Methode als Tool. Die Beschreibung (`description`) ist entscheidend – das Modell wählt das Tool anhand dieser Beschreibung aus:
+Die `@Tool`-Annotation markiert eine Methode als Tool. Die Beschreibung (`description`) ist entscheidend – das Modell wählt das Tool anhand dieser Beschreibung aus. Im aktuellen Projekt ist das Tool außerdem im Profil `!mcp` aktiv und erhält über `ToolContext` eine Session:
 
 ```java
 @Component
-public class InsuranceCustomerDetailsTool {
+public class InsuranceAssistantCustomerDetailsTool {
 
-    static final Logger logger = LoggerFactory.getLogger(InsuranceCustomerDetailsTool.class);
+    static final Logger logger = LoggerFactory.getLogger(InsuranceAssistantCustomerDetailsTool.class);
 
-    private InsuranceCustomerService insuranceCustomerService;
+    private InsuranceAssistentCustomerService insuranceCustomerService;
+    private InsuranceProperties insuranceProperties;
    
-    public InsuranceCustomerDetailsTool(InsuranceCustomerService insuranceCustomerService) {
+    public InsuranceAssistantCustomerDetailsTool(InsuranceAssistentCustomerService insuranceCustomerService,
+                                                 InsuranceProperties insuranceProperties) {
        this.insuranceCustomerService=insuranceCustomerService;
+       this.insuranceProperties=insuranceProperties;
     }
 
     @Tool(name = "getCustomerDetails", description = "Ermittelt Kundendaten eines Kunden")
-    public Customer getCustomerDetails(@ToolParam(required = true, description = "Name des Kunden") String name) {
+    public Customer getCustomerDetails(@ToolParam(required = true, description = "Name des Kunden") String name,
+                                       ToolContext context) {
+        logger.info(context.getContext().get("session").toString());
+        if (insuranceProperties.exception()) {
+            throw new InsuranceException("Konnte Customer Details nicht ermitteln");
+        }
         return insuranceCustomerService.getCustomerDetails(name);
     }
 
@@ -102,14 +110,17 @@ Das Tool wird einmalig am `ChatClient.Builder` registriert
 public class InsuranceAssistantConfiguration {
 
     @Bean
-    public ChatClient createClient(ChatClient.Builder chatClientBuilder,ChatMemory chatMemory, 
-                                   InsuranceCustomerDetailsTool insuranceCustomerDetailsTool) {
+    public ChatClient createClient(ChatClient.Builder chatClientBuilder,
+                                   MessageChatMemoryAdvisor messageChatMemoryAdvisor,
+                                   ToolCallbackProvider tools,
+                                   RetrievalAugmentationAdvisor retrievalAugmentationAdvisor) {
 
         var chatClient = chatClientBuilder.defaultOptions(createChatOptions())
                                           .defaultSystem(createSystemPrompt().toString())
-                                          .defaultAdvisors(createChatMemoryAdvisor(chatMemory))
+                                          .defaultAdvisors(messageChatMemoryAdvisor)
                                           .defaultAdvisors(a -> a.param(ChatMemory.CONVERSATION_ID, "InsuranceAssistent"))
-                                          .defaultTools(insuranceCustomerDetailsTool)
+                                          .defaultTools(tools)
+                                          .defaultAdvisors(retrievalAugmentationAdvisor)
                                           .build();
         return chatClient;
     }
@@ -132,7 +143,7 @@ Das Template wird mit Variablen befüllt:
 ```java
 .variables(Map.of(
     "assistentName", "AI Insurance Assistent",
-    "availableTools", "getCustomerDetails - Kundendaten abrufen"
+    "getCustomerDetails", "getCustomerDetails"
 ))
 ``` 
 

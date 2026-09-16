@@ -233,14 +233,14 @@ Der `ChatClient` wird mit den Advisors konfiguriert:
 @Bean
 public ChatClient createClient(ChatClient.Builder chatClientBuilder,
         MessageChatMemoryAdvisor messageChatMemoryAdvisor,
-        InsuranceAssistantCustomerDetailsTool insuranceCustomerDetailsTool,
+    ToolCallbackProvider tools,
         RetrievalAugmentationAdvisor retrievalAugmentationAdvisor) {
 
     var chatClient = chatClientBuilder.defaultOptions(createChatOptions())
             .defaultSystem(createSystemPrompt().toString())
             .defaultAdvisors(messageChatMemoryAdvisor)                    // Chat History
             .defaultAdvisors(a -> a.param(ChatMemory.CONVERSATION_ID, "InsuranceAssistent"))
-            .defaultTools(insuranceCustomerDetailsTool)                  // Tools
+            .defaultTools(tools)                                         // Local or MCP tools
             .defaultToolContext(new HashMap<String, Object>(Map.of("session", "No Id")))
             .defaultAdvisors(retrievalAugmentationAdvisor)                // RAG Advisor
             .build();

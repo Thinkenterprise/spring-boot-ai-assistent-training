@@ -78,7 +78,7 @@ Mit `throw-exception-on-error: true` werden Exceptions aus Tools weitergeleitet,
 
 ### Tool mit Exception-Handling
 
-Das Tool `InsuranceCustomerDetailsTool` wirft eine `InsuranceException`, wenn das Property `exception: true` gesetzt ist:
+Das Tool `InsuranceAssistantCustomerDetailsTool` wirft eine `InsuranceException`, wenn das Property `exception: true` gesetzt ist:
 
 ```java
 @Tool(name = "getCustomerDetails", description = "Ermittelt Kundendaten eines Kunden")
@@ -89,7 +89,7 @@ public Customer getCustomerDetails(
     logger.info(context.getContext().get("session").toString());
     
     // Wenn Property exception = true, wird eine Exception geworfen
-    if(insuranceProperties.exception()) {
+    if (insuranceProperties.exception()) {
         throw new InsuranceException("Konnte Customer Details nicht ermitteln");
     }
     
@@ -116,7 +116,7 @@ Mit `throw-exception-on-error: true` wird die Exception an den Controller weiter
 ResponseEntity<ProblemDetail> handleException(InsuranceException exception) {
     ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
     problemDetail.setType(URI.create("http://thinkenterprise.com/InsuranceException"));
-    problemDetail.setTitle("Insurance Exception");
+    problemDetail.setTitle("Tool Execution Problem");
     problemDetail.setDetail(exception.getMessage());
     return ResponseEntity.badRequest().body(problemDetail);
 }
@@ -145,7 +145,7 @@ Diese Antwort wird als strukturiertes JSON an den Client gesendet — kein Stack
    ```json
    {
      "type": "http://thinkenterprise.com/InsuranceException",
-     "title": "Insurance Exception",
+    "title": "Tool Execution Problem",
      "status": 400,
      "detail": "Konnte Customer Details nicht ermitteln"
    }

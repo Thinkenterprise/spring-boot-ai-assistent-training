@@ -110,20 +110,23 @@ Das folgende Beispiel zeigt diese Grundstruktur:
 
 ```java
 @SpringBootApplication
-public class ChatApplication implements ApplicationRunner {
+public class InsuranceAssistantApplication {
 
-	@Autowired
-	ChatModel model;  // Automatisch durch Autoconfiguration bereitgestellt
-	
-	public static void main(String[] args) {
-		SpringApplication.run(ChatApplication.class, args); 
-	}
+     private final ChatModel chatModel;
 
-	@Override
-	public void run(ApplicationArguments args) throws Exception {
-		String answer = model.call("Hello");
-		System.out.println(answer);
-	}
+     InsuranceAssistantApplication(ChatModel chatModel) {
+          this.chatModel = chatModel;
+     }
+
+     public static void main(String[] args) {
+          SpringApplication.run(InsuranceAssistantApplication.class, args);
+     }
+
+     @Profile("init")
+     @Bean
+     ApplicationRunner run() {
+          return args -> System.out.println(chatModel.call("Hello"));
+     }
 }
 ```
 

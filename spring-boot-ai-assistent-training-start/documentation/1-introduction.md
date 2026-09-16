@@ -74,15 +74,15 @@ Für die Schulung wird folgender Technologie-Stack verwendet:
 
 | Technologie | Version | Beschreibung |
 |---|---|---|
-| **Java** | 21 (Adoptium) | Laufzeitumgebung für alle Beispiele |
-| **Maven** | 3.9.9 | Build- und Dependency-Management |
-| **Spring Boot** | 3.5.x | Basis-Framework für die Anwendungsentwicklung |
-| **Spring AI** | 1.1.4 | Spring-Integration für AI-Modelle und -Komponenten |
-| **Ollama** | 0.17.0 | Lokale Bereitstellung von Open Source AI-Modellen |
+| **Java** | 21 | Laufzeitumgebung für alle Beispiele |
+| **Maven** | 3.9.x | Build- und Dependency-Management |
+| **Spring Boot** | 4.1.0 | Basis-Framework für die Anwendungsentwicklung |
+| **Spring AI** | 2.0.0 | Spring-Integration für AI-Modelle und -Komponenten |
+| **Ollama** | aktuell | Lokale Bereitstellung von Open Source AI-Modellen |
 | **LLaMA** | 3.3 | Open Source Sprachmodell von Meta (via Ollama) |
 | **VS Code** | 1.x.x | Empfohlene IDE |
 
-Spring AI bringt erst Ende Mai die Version 2.0.0 heraus, deren Grundlage Spring 4.x.x ist. Daher wird aktuell noch mit den oben aufgeführten Versionen gearbeitet. 
+Die Versionsstände entsprechen dem aktuellen Projektstand. Spring Boot 4 und Spring AI 2 basieren auf der Jakarta-EE- und Spring-Generation und benötigen Java 17 oder höher. Für dieses Projekt wird Java 21 verwendet.
 
 Für **Visual Studio Code** werden folgende Extensions empfohlen:
 

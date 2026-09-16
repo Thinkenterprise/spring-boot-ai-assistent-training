@@ -28,8 +28,8 @@ In dieser Einheit betrachten wir ausschließlich den **Controller**. Er nimmt HT
 ```
 ## Implementation
 
-### InsuranceChatController
-Der ``InsuranceAssistantController`` stellt über `POST /chat` einen REST-Endpunkt bereit. Der Request-Body wird als String entgegengenommen und direkt an den ``InsuranceAssistantService`` weitergegeben, der die Modellantwort erzeugt und als String zurückliefert.
+### InsuranceAssistantController
+Der ``InsuranceAssistantController`` stellt unter `/chat` zwei REST-Endpunkte bereit: `POST /chat` erwartet ein JSON-Objekt mit `message` und `conversationId` und liefert ein JSON-Objekt mit `reply`. `POST /chat/console` erwartet dagegen einfachen Text und liefert die Modellantwort als String.
 
 ```java
 @RestController
@@ -42,9 +42,17 @@ public class InsuranceAssistantController {
         this.insuranceChatService=insuranceChatService;
     }
 
+    @PostMapping("console")
+    public String chatConsole(@RequestBody String input) {
+       return insuranceChatService.chatServiceWithoutMemory(input);
+    }
+
     @PostMapping
-    public String chat(@RequestBody String input) {
-       return insuranceChatService.chatService(input);
+    public Map<String, String> chat(@RequestBody Map<String, String> payload) {
+        String message = payload.get("message");
+        String conversationId = payload.get("conversationId");
+        String result = insuranceChatService.chatService(message, conversationId);
+        return Map.of("reply", result);
     }
 }
 
@@ -61,8 +69,8 @@ Für diesen Schritt ist keine zusätzliche Konfiguration notwendig. Die Spring B
 
 ```bash
 curl -X POST "http://localhost:8080/chat" \
-    -H "Content-Type: text/plain" \
-    -d "Hallo"
+    -H "Content-Type: application/json" \
+    -d '{"message":"Hallo","conversationId":"demo"}'
 ```
 
 3. Die Antwort des Modells wird als Text zurückgegeben.

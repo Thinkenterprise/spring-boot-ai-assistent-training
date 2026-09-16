@@ -63,15 +63,13 @@ Das folgende Beispiel erzeugt einen ``ChatClient`` als Spring Bean und setzt mit
 
 ```java
 @Configuration
-public class InsuranceAssistentConfiguration {
+public class InsuranceAssistantConfiguration {
   
     @Bean
-    public ChatClient createClient(ChatClient.Builder builder) {
-        var chatClient = builder.defaultOptions(ChatOptions.builder().
-                                                            maxTokens(512)
-                                                            .build())
-                                .build();
-        return chatClient;
+    public ChatClient createClient(ChatClient.Builder chatClientBuilder) {
+        return chatClientBuilder
+                .defaultOptions(ChatOptions.builder().maxTokens(512).build())
+                .build();
     }
 }
 ```
@@ -135,7 +133,7 @@ In der Praxis wird der ``ChatClient`` in der Regel nicht direkt vom Controller v
 
 ```java
 @Service
-public class InsuranceChatService {
+public class InsuranceAssistantService {
 
     private final ChatClient chatClient;
 
@@ -143,7 +141,7 @@ public class InsuranceChatService {
         this.chatClient = chatClient;
     }
 
-    public String chatService(String input) {
+    public String chatServiceWithoutMemory(String input) {
         return chatClient
             .prompt(input)
             .call()

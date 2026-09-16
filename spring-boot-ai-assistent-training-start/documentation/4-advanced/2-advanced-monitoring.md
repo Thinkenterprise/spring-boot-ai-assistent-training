@@ -223,7 +223,7 @@ management:
 
 `management.tracing.sampling.probability` ist die einzige Tracing-Property, die explizit gesetzt werden muss — das Anlegen des `Tracer`-Beans, die Span-Erzeugung sowie der Export übernehmen die in den **Libraries** beschriebenen Autoconfiguration-Module automatisch.
 
-Der Spring Boot Actuator sendet alle Tracing-Informationen automatisch **push-basiert** über **OTLP** an Zipkin (Standard-Endpoint `http://localhost:9411/api/v2/spans`, passend zum Port-Mapping des Zipkin-Containers). Die Tracing-Informationen können über die Zipkin-Oberfläche unter `http://localhost:9411/` angezeigt werden.
+Der konfigurierte Zipkin-Exporter sendet die Tracing-Informationen automatisch **push-basiert** per HTTP an den Zipkin-Endpoint `http://localhost:9411/api/v2/spans`, passend zum Port-Mapping des Zipkin-Containers. Die Tracing-Informationen können über die Zipkin-Oberfläche unter `http://localhost:9411/` angezeigt werden.
 
 **Wichtige und oft verwendete Span-Tags:**
 

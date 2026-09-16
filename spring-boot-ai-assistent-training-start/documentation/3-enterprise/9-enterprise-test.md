@@ -100,7 +100,7 @@ Folgende Dependencies müssen in der `pom.xml` eingebunden sein:
 
 ### Testklasse
 
-Die Testklasse verwendet `@SpringBootTest` für einen vollständigen Integrationstest. `@Testcontainers` aktiviert das automatische Container-Management. Die beiden statischen Container-Felder werden mit `@Container` und `@ServiceConnection` annotiert – Spring AI konfiguriert dadurch die Verbindungsparameter automatisch:
+Die Testklasse verwendet `@SpringBootTest` für einen vollständigen Integrationstest. `@Testcontainers` aktiviert das automatische Container-Management. Die beiden statischen Container-Felder werden mit `@Container` und `@ServiceConnection` annotiert – Spring AI konfiguriert dadurch die Verbindungsparameter automatisch. Der aktuelle Test ist mit `@Disabled` deaktiviert und muss für eine tatsächliche Evaluation bewusst aktiviert werden:
 
 ```java
 @SpringBootTest
