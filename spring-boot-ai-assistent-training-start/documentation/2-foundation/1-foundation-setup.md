@@ -18,18 +18,18 @@ Spring AI wurde 2023 als Reaktion auf den ChatGPT-Hype im Spring-Ökosystem aufg
 
 > **Hinweis:** Eine Alternative zu Spring AI im Java-Umfeld ist **LangChain4j**. In diesem Training verwenden wir ausschließlich Spring AI.
 
-Spring Boot (z. B. 3.5.x) und Spring AI (z. B. 1.1.4) sind jeweils über ihre Projektseiten dokumentiert: [Spring Boot](https://spring.io/projects/spring-boot) und [Spring AI](https://spring.io/projects/spring-ai). Spring AI nutzt dabei den Starter-Mechanismus von Spring Boot.
+Spring Boot 4.1.0 und Spring AI 2.0.0 sind jeweils über ihre Projektseiten dokumentiert: [Spring Boot](https://spring.io/projects/spring-boot) und [Spring AI](https://spring.io/projects/spring-ai). Spring AI nutzt dabei den Starter-Mechanismus von Spring Boot.
 
 
 ## Libraries
 
-Wir verwenden Java 21 als Long-Term-Support-Version. Spring Boot 3.5.x ist auf Java 21 ausgelegt. Spring AI 1.1.4 baut auf Spring Boot auf und stellt zusätzliche AI-Starter bereit.
+Wir verwenden Java 21 als Long-Term-Support-Version. Spring Boot 4.1.0 und Spring AI 2.0.0 bauen darauf auf und stellen die Basis sowie zusätzliche AI-Starter für die Anwendung bereit.
 
 ```xml
     <properties>
         <java.version>21</java.version>
-        <spring-ai.version>1.1.4</spring-ai.version>
-        <spring-boot.version>3.5.0</spring-boot.version>
+        <spring-ai.version>2.0.0</spring-ai.version>
+        <spring-boot.version>4.1.0</spring-boot.version>
     </properties>
 ```
 
@@ -39,7 +39,7 @@ Die Parent-BOM (`spring-boot-starter-parent`) stellt einheitliche Dependency-Ver
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>${spring-boot.version}</version>
+        <version>4.1.0</version>
         <relativePath />
     </parent>
 ```
@@ -94,10 +94,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ChatApplication {
+public class InsuranceAssistantApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ChatApplication.class, args);
+        SpringApplication.run(InsuranceAssistantApplication.class, args);
     }
 }
 ```

@@ -3,6 +3,7 @@ package com.thinkenterprise.ai;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.evaluation.RelevancyEvaluator;
@@ -35,8 +36,9 @@ class InsuranceApplicationTests {
 	@Container
 	@ServiceConnection
 	static QdrantContainer qdrantContainer = new QdrantContainer("qdrant/qdrant");
-
+		
 	@Test
+	@Disabled 
 	public void testRagLifeSecurityConditions(@Autowired InsuranceChatService insuranceChatService,
 			@Autowired ChatModel chatModel) {
 

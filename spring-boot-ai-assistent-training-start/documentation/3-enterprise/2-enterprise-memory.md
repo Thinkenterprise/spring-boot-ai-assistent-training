@@ -38,12 +38,12 @@ Spring AI stellt eine **`ChatMemory`** Abstraktion bereit, die Nachrichten speic
 
 ## Konfiguration
 
-Spring AI stellt über **`ChatMemoryAutoConfiguration`** automatisch ein `ChatMemory` mit einem `InMemoryChatMemoryRepository` zur Verfügung. Dies ist ideal für Entwicklung und Testing.
+Spring AI stellt über **`ChatMemoryAutoConfiguration`** automatisch ein `ChatMemory` mit einem `InMemoryChatMemoryRepository` zur Verfügung. Eine eigene `ChatMemory`-Bean ist im aktuellen Projekt daher nicht erforderlich.
 
 ```java
 @Bean
-public ChatMemory createChatMemory() {
-    return new MessageWindowChatMemory();
+public MessageChatMemoryAdvisor createChatMemoryAdvisor(ChatMemory chatMemory) {
+    return MessageChatMemoryAdvisor.builder(chatMemory).build();
 }
 ```
 
@@ -51,11 +51,16 @@ Das Memory wird dem `ChatClient` über einen **`MessageChatMemoryAdvisor`** hinz
 
 ```java
 @Bean
-public ChatClient createClient(ChatClient.Builder builder, ChatMemory chatMemory) {
-    var chatClient = builder
+public ChatClient createClient(ChatClient.Builder chatClientBuilder,
+        MessageChatMemoryAdvisor messageChatMemoryAdvisor,
+        ToolCallbackProvider tools,
+        RetrievalAugmentationAdvisor retrievalAugmentationAdvisor) {
+    var chatClient = chatClientBuilder
         .defaultOptions(createChatOptions())
         .defaultSystem(createSystemPrompt().toString())
-        .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+        .defaultAdvisors(messageChatMemoryAdvisor)
+        .defaultTools(tools)
+        .defaultAdvisors(retrievalAugmentationAdvisor)
         .build();
     return chatClient;
 }

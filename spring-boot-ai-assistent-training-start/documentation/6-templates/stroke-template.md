@@ -14,8 +14,8 @@ Welche Dependencies muss ich einfügen
 ```xml
 <properties>
         <java.version>21</java.version>
-        <spring-ai.version>1.1.2</spring-ai.version>
-        <spring-boot.version>3.5.0</spring-boot.version>
+        <spring-ai.version>2.0.0</spring-ai.version>
+        <spring-boot.version>4.1.0</spring-boot.version>
     </properties>
 ```
 

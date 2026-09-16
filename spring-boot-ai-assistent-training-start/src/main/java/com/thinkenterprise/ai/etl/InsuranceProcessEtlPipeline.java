@@ -1,7 +1,6 @@
 package com.thinkenterprise.ai.etl;
 
 import java.util.List;
-import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
