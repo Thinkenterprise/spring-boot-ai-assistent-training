@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "additionalDirectories": [
+      "../spring-boot-ai-assistent-training-final"
+    ],
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep"
+    ]
+  }
+}
