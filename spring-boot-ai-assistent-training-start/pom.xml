@@ -11,8 +11,8 @@
     <description>Source Code of the Spring AI Assistent Training </description>
 
     <properties>
-        <java.version>25</java.version>
     </properties>
+
 
     <repositories>
         <repository>

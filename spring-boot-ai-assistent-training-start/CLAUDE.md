@@ -19,7 +19,7 @@ Ein Namenswechsel erfordert daher nur hier eine Änderung.
 - **Skeleton** (Arbeitswurzel, einziger Schreibort): das in VS Code geöffnete Projekt,
   also die aktuelle Arbeitswurzel `.`
 - **Finale Implementierung** (READ-ONLY, Referenz): `../spring-boot-ai-assistent-training-final`
-- **Dokumentation** (Sessions als .md): `documentation/`  (liegt im Skeleton)
+- **Dokumentation** (Sessions als .md): `tutorial/`  (liegt im Skeleton)
 
 > Diese Angaben liest Claude Code als Definitionen — es sind keine Shell-Variablen mit
 > automatischer Ersetzung. Der Name der finalen Implementierung muss nur hier stimmen.
@@ -63,6 +63,13 @@ in finaler Implementierung und Skeleton **identisch**:
    Zustand erzeugen (vor `ergänzen` prüfen, ob der Inhalt bereits vorhanden ist).
 8. **Rückmeldung:** Am Ende knapp auflisten, welche Dateien mit welcher Operation
    geändert wurden — keine langen Erklärungen.
+9. **Profile beachten:** Ist der im Scope einer Session eingespielte Code (z. B. eine
+   `ApplicationRunner`-Bean) mit `@Profile(...)` annotiert, muss das Profil aktiv sein,
+   sonst wird der Code beim Start nicht ausgeführt. Aktivierung erfolgt über
+   `spring.profiles.active` in `application.yaml` (Konfiguration-Sektion) — **nicht**
+   über einen Kommandozeilen-Parameter, damit die Anwendung auch beim Start aus der IDE
+   funktioniert. Das gilt sowohl bei der Herleitung der Steps-Einträge durch
+   `/sessionSteps` als auch bei deren Ausgabe durch `/step`.
 
 ## Sektionen — Namen, Kürzel und Dateityp (EINZIGE STELLE)
 Eine Sektion kann im Kommando über den **vollen Namen ODER das Kürzel** angesprochen
